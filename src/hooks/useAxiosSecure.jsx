@@ -1,11 +1,11 @@
 import axios from 'axios';
 import React, { useEffect } from 'react';
-import useAuth from './UseAuth';
 import { useNavigate } from 'react-router';
+import useAuth from './useAuth';
 
 const axiosSecure = axios.create({
-  // baseURL: "http://localhost:3000",
-  baseURL: "https://zap-shift-server-iota-indol.vercel.app",
+  baseURL: "http://localhost:3000",
+  // baseURL: "https://zap-shift-server-iota-indol.vercel.app",
 });
 
 const useAxiosSecure = () => {
@@ -36,8 +36,6 @@ const useAxiosSecure = () => {
     })
 
     return () => {
-      // axios.interceptors.request.eject(reqInterceptor);
-      // axios.interceptors.response.eject(resInterceptor);
       axiosSecure.interceptors.request.eject(reqInterceptor);
       axiosSecure.interceptors.response.eject(resInterceptor);
 

@@ -1,8 +1,8 @@
 import axios from 'axios';
 import React from 'react';
 const axiosInstance = axios.create({
-  // baseURL: "http://localhost:3000",
-  baseURL: "https://zap-shift-server-iota-indol.vercel.app",
+  baseURL: "http://localhost:3000",
+  // baseURL: "",
 });
 const useAxios = () => {
     return axiosInstance

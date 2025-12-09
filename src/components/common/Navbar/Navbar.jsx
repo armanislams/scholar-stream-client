@@ -1,7 +1,16 @@
 import React from "react";
 import { Link, NavLink } from "react-router";
+import useAuth from "../../../hooks/useAuth";
 
 const Navbar = () => {
+    const { user, logOut } = useAuth();
+    const handleLogOut = () => {
+      logOut()
+        .then()
+        .catch((err) => {
+          console.log(err);
+        });
+    };
   const links = (
     <>
       <li><NavLink to={''} className="hover:text-purple-600 transition-colors">Home</NavLink></li>
@@ -37,7 +46,10 @@ const Navbar = () => {
               {links}
             </ul>
           </div>
-          <Link to={'/'} className="btn btn-ghost text-xl font-bold gradient-text">
+          <Link
+            to={"/"}
+            className="btn btn-ghost text-xl font-bold gradient-text"
+          >
             ScholarStream
           </Link>
         </div>
@@ -45,7 +57,15 @@ const Navbar = () => {
           <ul className="menu menu-horizontal px-1">{links}</ul>
         </div>
         <div className="navbar-end">
-          <a className="btn">Button</a>
+          {user ? (
+            <button onClick={handleLogOut} className="btn ">
+              Log Out
+            </button>
+          ) : (
+            <Link to={"/login"} className="btn ">
+              Login
+            </Link>
+          )}
         </div>
       </div>
     </div>

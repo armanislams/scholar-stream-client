@@ -1,6 +1,8 @@
 import React from 'react';
 import Hero from '../../components/LandingPage/Hero';
 import Testimonials from '../../components/LandingPage/Testimonials';
+import TopScholarships from '../../components/LandingPage/TopScholarships';
+import { Link } from 'react-router';
 
 const HomeLayout = () => {
    
@@ -8,7 +10,7 @@ const HomeLayout = () => {
     return (
         <div className="min-h-screen bg-base-100">
            <Hero/>
-          
+          <TopScholarships/>
 
             {/* Features Section */}
             <section className="py-10 bg-base-100">
@@ -136,16 +138,16 @@ const HomeLayout = () => {
                         Create your free account today and discover scholarships waiting for you.
                     </p>
                     <div className="flex flex-wrap gap-4 justify-center">
-                        <button className="btn btn-lg bg-white text-purple-600 hover:bg-white/90 border-none px-8">
+                        <Link to={'/register'} className="btn btn-lg bg-white text-purple-600 hover:bg-white/90 border-none px-8">
                             Create Free Account
-                        </button>
-                        <button className="btn btn-lg glass-card text-white border-white/30 hover:bg-white/20 px-8">
+                        </Link>
+                        <Link type='/faq' className="btn btn-lg glass-card text-white border-white/30 hover:bg-white/20 px-8">
                             Learn More
-                        </button>
+                        </Link>
                     </div>
 
                     <div className="mt-12 text-white/80">
-                        <p className="text-sm">No credit card required • Free forever • Cancel anytime</p>
+                        <p className="text-sm">No credit card required • Free forever</p>
                     </div>
                 </div>
             </section>

@@ -1,5 +1,6 @@
 import React from 'react';
 import heroImage from "../../assets/hero_illustration.png";
+import { Link } from 'react-router';
 
 const Hero = () => {
     return (
@@ -23,12 +24,12 @@ const Hero = () => {
                                 ScholarStream connects ambitious students with life-changing opportunities.
                             </p>
                             <div className="flex flex-wrap gap-4">
-                                <button className="btn btn-lg btn-gradient hover-glow px-8">
+                                <Link to={'/register'} className="btn btn-lg btn-gradient hover-glow px-8">
                                     Get Started Free
-                                </button>
-                                <button className="btn btn-lg glass-card text-white border-white/30 hover:bg-white/20 px-8">
+                                </Link>
+                                <Link to={'/all-scholarships'} className="btn btn-lg glass-card text-white border-white/30 hover:bg-white/20 px-8">
                                     Browse Scholarships
-                                </button>
+                                </Link>
                             </div>
                         </div>
 

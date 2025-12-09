@@ -4,7 +4,6 @@ const TestimonialCards = ({ review }) => {
   const {
     universityName,
     userName,
-    userEmail,
     userImage,
     ratingPoint,
     reviewComment,
@@ -46,6 +45,7 @@ const TestimonialCards = ({ review }) => {
             </svg>
           ))}
         </div>
+          <span>{reviewDate}</span>
       </div>
     </div>
   );
