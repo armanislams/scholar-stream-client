@@ -11,14 +11,36 @@ const AllScholarships = () => {
     useState("");
   const [selectedSubjectCategory, setSelectedSubjectCategory] = useState("");
   const [selectedLocation, setSelectedLocation] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const { data: scholarships = [], isLoading } = useQuery({
+  const handleSearchChange = (e) => {
+    setSearchText(e.target.value);
+    setCurrentPage(1);
+  };
+
+  const handleScholarshipCategoryChange = (e) => {
+    setSelectedScholarshipCategory(e.target.value);
+    setCurrentPage(1);
+  };
+
+  const handleSubjectCategoryChange = (e) => {
+    setSelectedSubjectCategory(e.target.value);
+    setCurrentPage(1);
+  };
+
+  const handleLocationChange = (e) => {
+    setSelectedLocation(e.target.value);
+    setCurrentPage(1);
+  };
+
+  const { data: paginatedData, isLoading } = useQuery({
     queryKey: [
       "scholarships",
       searchText,
       selectedScholarshipCategory,
       selectedSubjectCategory,
       selectedLocation,
+      currentPage,
     ],
     queryFn: async () => {
       const text = searchText?.trim() || "";
@@ -32,19 +54,31 @@ const AllScholarships = () => {
       if (selectedLocation)
         params.append("universityCountry", selectedLocation);
 
+      // Add pagination parameters
+      params.append("page", currentPage);
+      params.append("limit", 12);
+
       const res = await axiosSecure.get(`/scholarships?${params.toString()}`);
       return res.data;
     },
   });
 
+  // Extract data from paginated response
+  const scholarships = paginatedData?.data || [];
+  const totalCount = paginatedData?.totalCount || 0;
+  const totalPages = paginatedData?.totalPages || 0;
+  const pageSize = paginatedData?.pageSize || 12;
+
   // Extract unique filter options from all scholarships
-  const { data: allScholarships = [] } = useQuery({
+  const { data: allScholarshipsData } = useQuery({
     queryKey: ["all-scholarships-for-filters"],
     queryFn: async () => {
       const res = await axiosSecure.get("/scholarships");
       return res.data;
     },
   });
+
+  const allScholarships = allScholarshipsData?.data || [];
 
   const scholarshipCategories = [
     ...new Set(allScholarships.map((s) => s.scholarshipCategory)),
@@ -62,6 +96,7 @@ const AllScholarships = () => {
     setSelectedScholarshipCategory("");
     setSelectedSubjectCategory("");
     setSelectedLocation("");
+    setCurrentPage(1);
   };
 
   // Count active filters
@@ -71,9 +106,51 @@ const AllScholarships = () => {
     selectedLocation,
   ].filter(Boolean).length;
 
+  // Pagination handlers
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // Generate page numbers to display
+  const getPageNumbers = () => {
+    const pages = [];
+    const maxPagesToShow = 5;
+
+    if (totalPages <= maxPagesToShow) {
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      if (currentPage <= 3) {
+        for (let i = 1; i <= 4; i++) pages.push(i);
+        pages.push('...');
+        pages.push(totalPages);
+      } else if (currentPage >= totalPages - 2) {
+        pages.push(1);
+        pages.push('...');
+        for (let i = totalPages - 3; i <= totalPages; i++) pages.push(i);
+      } else {
+        pages.push(1);
+        pages.push('...');
+        pages.push(currentPage - 1);
+        pages.push(currentPage);
+        pages.push(currentPage + 1);
+        pages.push('...');
+        pages.push(totalPages);
+      }
+    }
+
+    return pages;
+  };
+
   if (isLoading) {
     return <Loader />;
   }
+
+  // Calculate current range
+  const startIndex = (currentPage - 1) * pageSize + 1;
+  const endIndex = Math.min(currentPage * pageSize, totalCount);
 
   return (
     <div className="min-h-screen bg-base-300 text-base-content p-6 md:p-10 lg:p-20">
@@ -114,7 +191,7 @@ const AllScholarships = () => {
                 </svg>
                 <input
                   value={searchText}
-                  onChange={(e) => setSearchText(e.target.value)}
+                  onChange={handleSearchChange}
                   type="search"
                   className="grow"
                   placeholder="Search Scholarship Name, University Name, or Degree"
@@ -127,7 +204,7 @@ const AllScholarships = () => {
               {/* Scholarship Category Filter */}
               <select
                 value={selectedScholarshipCategory}
-                onChange={(e) => setSelectedScholarshipCategory(e.target.value)}
+                onChange={handleScholarshipCategoryChange}
                 className="select select-bordered w-full"
               >
                 <option value="">All Scholarship Categories</option>
@@ -141,7 +218,7 @@ const AllScholarships = () => {
               {/* Subject Category Filter */}
               <select
                 value={selectedSubjectCategory}
-                onChange={(e) => setSelectedSubjectCategory(e.target.value)}
+                onChange={handleSubjectCategoryChange}
                 className="select select-bordered w-full"
               >
                 <option value="">All Subject Categories</option>
@@ -155,7 +232,7 @@ const AllScholarships = () => {
               {/* Location Filter */}
               <select
                 value={selectedLocation}
-                onChange={(e) => setSelectedLocation(e.target.value)}
+                onChange={handleLocationChange}
                 className="select select-bordered w-full"
               >
                 <option value="">All Locations</option>
@@ -212,27 +289,22 @@ const AllScholarships = () => {
             {/* Results Count and Clear Filters */}
             <div className="flex flex-wrap items-center justify-between gap-2">
               <div className="text-sm text-base-content/70">
-                {searchText || activeFiltersCount > 0 ? (
-                  <>
-                    Found{" "}
-                    <span className="font-bold text-primary">
-                      {scholarships.length}
-                    </span>{" "}
-                    scholarship{scholarships.length !== 1 ? "s" : ""}
-                    {searchText && ` matching "${searchText}"`}
-                    {activeFiltersCount > 0 &&
-                      ` with ${activeFiltersCount} filter${
-                        activeFiltersCount !== 1 ? "s" : ""
-                      } applied`}
-                  </>
-                ) : (
+                {totalCount > 0 ? (
                   <>
                     Showing{" "}
                     <span className="font-bold text-primary">
-                      {scholarships.length}
+                      {startIndex}-{endIndex}
                     </span>{" "}
-                    scholarship{scholarships.length !== 1 ? "s" : ""}
+                    of{" "}
+                    <span className="font-bold text-primary">{totalCount}</span>{" "}
+                    scholarship{totalCount !== 1 ? "s" : ""}
+                    {searchText && ` matching "${searchText}"`}
+                    {activeFiltersCount > 0 &&
+                      ` with ${activeFiltersCount} filter${activeFiltersCount !== 1 ? "s" : ""
+                      } applied`}
                   </>
+                ) : (
+                  <>No scholarships found</>
                 )}
               </div>
               {(searchText || activeFiltersCount > 0) && (
@@ -250,11 +322,62 @@ const AllScholarships = () => {
 
       {/* Scholarships Grid */}
       {scholarships.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-          {scholarships.map((scholarship) => (
-            <ScholarshipCard key={scholarship._id} scholarship={scholarship} />
-          ))}
-        </div>
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-8">
+            {scholarships.map((scholarship) => (
+              <ScholarshipCard
+                key={scholarship._id}
+                scholarship={scholarship}
+              />
+            ))}
+          </div>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="flex justify-center items-center gap-2 mt-8">
+              <div className="join">
+                {/* Previous Button */}
+                <button
+                  className={`join-item btn btn-sm ${currentPage === 1 ? "hidden" : "block"
+                    }`}
+                  onClick={() => handlePageChange(currentPage - 1)}
+                >
+                  «
+                </button>
+
+                {/* Page Numbers */}
+                {getPageNumbers().map((page, index) =>
+                  page === "..." ? (
+                    <button
+                      key={`ellipsis-${index}`}
+                      className="join-item btn btn-sm btn-disabled"
+                    >
+                      ...
+                    </button>
+                  ) : (
+                    <button
+                      key={page}
+                      className={`join-item btn btn-sm ${currentPage === page ? "btn-active btn-primary" : ""
+                        }`}
+                      onClick={() => handlePageChange(page)}
+                    >
+                      {page}
+                    </button>
+                  )
+                )}
+
+                {/* Next Button */}
+                <button
+                  className={`join-item btn btn-sm ${currentPage === totalPages ? 'hidden' : 'block'
+                    }`}
+                  onClick={() => handlePageChange(currentPage + 1)}
+                >
+                  »
+                </button>
+              </div>
+            </div>
+          )}
+        </>
       ) : (
         <div className="text-center py-16">
           <svg
