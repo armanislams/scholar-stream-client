@@ -9,6 +9,9 @@
   font-family: 'Inter', sans-serif;
 }
 
+.active{
+  background-color: purple;
+}
 /* Custom Gradient Backgrounds */
 .gradient-primary {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);

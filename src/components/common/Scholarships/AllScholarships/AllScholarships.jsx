@@ -205,7 +205,7 @@ const AllScholarships = () => {
               <select
                 value={selectedScholarshipCategory}
                 onChange={handleScholarshipCategoryChange}
-                className="select select-bordered w-full"
+                className="select select-bordered w-full hover:cursor-pointer"
               >
                 <option value="">All Scholarship Categories</option>
                 {scholarshipCategories.map((category, i) => (
@@ -219,7 +219,7 @@ const AllScholarships = () => {
               <select
                 value={selectedSubjectCategory}
                 onChange={handleSubjectCategoryChange}
-                className="select select-bordered w-full"
+                className="select select-bordered w-full hover:cursor-pointer"
               >
                 <option value="">All Subject Categories</option>
                 {subjectCategories.map((category, i) => (
@@ -233,7 +233,7 @@ const AllScholarships = () => {
               <select
                 value={selectedLocation}
                 onChange={handleLocationChange}
-                className="select select-bordered w-full"
+                className="select select-bordered w-full hover:cursor-pointer"
               >
                 <option value="">All Locations</option>
                 {locations.map((location, i) => (
@@ -255,7 +255,7 @@ const AllScholarships = () => {
                     {selectedScholarshipCategory}
                     <button
                       onClick={() => setSelectedScholarshipCategory("")}
-                      className="hover:text-error"
+                      className="hover:text-error hover:cursor-pointer"
                     >
                       ✕
                     </button>
@@ -266,7 +266,7 @@ const AllScholarships = () => {
                     {selectedSubjectCategory}
                     <button
                       onClick={() => setSelectedSubjectCategory("")}
-                      className="hover:text-error"
+                      className="hover:text-error hover:cursor-pointer"
                     >
                       ✕
                     </button>
@@ -277,7 +277,7 @@ const AllScholarships = () => {
                     {selectedLocation}
                     <button
                       onClick={() => setSelectedLocation("")}
-                      className="hover:text-error"
+                      className="hover:text-error hover:cursor-pointer"
                     >
                       ✕
                     </button>
@@ -300,7 +300,8 @@ const AllScholarships = () => {
                     scholarship{totalCount !== 1 ? "s" : ""}
                     {searchText && ` matching "${searchText}"`}
                     {activeFiltersCount > 0 &&
-                      ` with ${activeFiltersCount} filter${activeFiltersCount !== 1 ? "s" : ""
+                      ` with ${activeFiltersCount} filter${
+                        activeFiltersCount !== 1 ? "s" : ""
                       } applied`}
                   </>
                 ) : (
@@ -338,8 +339,9 @@ const AllScholarships = () => {
               <div className="join">
                 {/* Previous Button */}
                 <button
-                  className={`join-item btn btn-sm ${currentPage === 1 ? "hidden" : "block"
-                    }`}
+                  className={`join-item btn btn-sm ${
+                    currentPage === 1 ? "hidden" : "block"
+                  }`}
                   onClick={() => handlePageChange(currentPage - 1)}
                 >
                   «
@@ -357,8 +359,9 @@ const AllScholarships = () => {
                   ) : (
                     <button
                       key={page}
-                      className={`join-item btn btn-sm ${currentPage === page ? "btn-active btn-primary" : ""
-                        }`}
+                      className={`join-item btn btn-sm ${
+                        currentPage === page ? "btn-active btn-primary" : ""
+                      }`}
                       onClick={() => handlePageChange(page)}
                     >
                       {page}
@@ -368,8 +371,9 @@ const AllScholarships = () => {
 
                 {/* Next Button */}
                 <button
-                  className={`join-item btn btn-sm ${currentPage === totalPages ? 'hidden' : 'block'
-                    }`}
+                  className={`join-item btn btn-sm ${
+                    currentPage === totalPages ? "hidden" : "block"
+                  }`}
                   onClick={() => handlePageChange(currentPage + 1)}
                 >
                   »
