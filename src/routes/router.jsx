@@ -4,6 +4,7 @@ import HomeLayout from "../Layouts/HomeLayout/HomeLayout";
 import Login from "../components/Auth/Login/Login";
 import Register from "../components/Auth/Register/Register";
 import AllScholarships from "../components/common/Scholarships/AllScholarships/AllScholarships";
+import ScholarshipDetails from "../components/common/Scholarships/ScholarshipDetails.jsx/ScholarshipDetails";
 
 const router = createBrowserRouter([
   {
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
       {
         path: '/all-scholarships',
         Component: AllScholarships
+      },
+      {
+        path: '/scholarship-details/:id',
+        Component: ScholarshipDetails
       }
     ],
   },

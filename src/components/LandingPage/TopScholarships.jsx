@@ -34,7 +34,8 @@ const TopScholarships = () => {
     //         View Details →
     //       </a>
     //     </div>
-    //   </div>
+        //   </div>
+        <div></div>
     );
 };
 

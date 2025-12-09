@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router";
 
 // Card component keys based on your JSON data
 const ScholarshipCard = ({ scholarship }) => {
@@ -9,6 +10,7 @@ const ScholarshipCard = ({ scholarship }) => {
     universityImage,
     scholarshipCategory,
     applicationFees,
+    _id: id
   } = scholarship;
 
   // Function to format the fee display
@@ -45,7 +47,7 @@ const ScholarshipCard = ({ scholarship }) => {
         </div>
 
         {/* Scholarship Name */}
-        <p className="text-lg font-semibold text-gray-300 line-clamp-2 min-h-[56px]">
+        <p className="text-lg font-semibold text-gray-300 line-clamp-2 min-h-14">
           {scholarshipName}
         </p>
 
@@ -87,9 +89,12 @@ const ScholarshipCard = ({ scholarship }) => {
 
         {/* Action Button (View Details) */}
         <div className="card-actions justify-start mt-4">
-          <button className="btn btn-primary btn-sm normal-case">
+          <Link
+            to={`/scholarship-details/${id}`}
+            className="btn btn-primary btn-sm normal-case"
+          >
             View Details
-          </button>
+          </Link>
         </div>
       </div>
     </div>

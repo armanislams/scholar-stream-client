@@ -22,7 +22,7 @@ const Register = () => {
   const { register: registerUser, updateUser } = useAuth();
   const handleRegister = (data) => {
     const profileImage = data.photo[0];
-    registerUser(data.email, data.password).then((result) => {
+    registerUser(data.email, data.password).then(() => {
       /// store the img
       const fromData = new FormData();
       fromData.append("image", profileImage);
@@ -52,7 +52,7 @@ const Register = () => {
           photoURL: photoURL,
         };
         updateUser(userProfile)
-          .then((result) => {
+          .then(() => {
             navigate(location?.state || "/");
           })
           .catch((err) => {
