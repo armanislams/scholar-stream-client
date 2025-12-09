@@ -3,7 +3,7 @@ import heroImage from "../../assets/hero_illustration.png";
 
 const Hero = () => {
     return (
-            <section className="relative md:h-[70vh] py-5 flex items-center justify-center overflow-hidden gradient-hero mt-10 rounded-md">
+            <section className="relative md:h-[70vh] py-5 md:py-10 flex items-center justify-center overflow-hidden gradient-hero mt-10 rounded-md">
                 {/* Animated Background Elements */}
                 <div className="absolute inset-0 overflow-hidden">
                     <div className="absolute top-20 left-10 w-72 h-72 bg-white/10 rounded-full blur-3xl animate-float"></div>
