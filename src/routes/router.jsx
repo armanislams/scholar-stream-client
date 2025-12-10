@@ -6,6 +6,7 @@ import Register from "../components/Auth/Register/Register";
 import AllScholarships from "../components/common/Scholarships/AllScholarships/AllScholarships";
 import ScholarshipDetails from "../components/common/Scholarships/ScholarshipDetails.jsx/ScholarshipDetails";
 import LearnMore from "../components/LandingPage/LearnMore";
+import PaymentSuccess from "../pages/Payments/PaymentSuccess";
 
 const router = createBrowserRouter([
   {
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
       {
         path: '/faq',
         Component: LearnMore
+      },
+      {
+        path: '/payment-success',
+        Component: PaymentSuccess
       },
     ],
   },

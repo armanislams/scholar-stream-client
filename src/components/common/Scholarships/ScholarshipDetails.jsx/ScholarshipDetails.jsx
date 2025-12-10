@@ -5,13 +5,14 @@ import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import Loader from "../../Loader/Loader";
 import dayjs from "dayjs";
 import useAuth from "../../../../hooks/useAuth";
-import { toast } from "react-toastify";
 import { PiNoteThin } from "react-icons/pi";
+import Swal from "sweetalert2";
 
 const ScholarshipDetails = () => {
   const { id } = useParams();
   const axiosSecure = useAxiosSecure();
   const { user } = useAuth()
+  // const navigate = useNavigate()
 
 
   const { data: scholarship = [], isLoading } = useQuery({
@@ -43,7 +44,7 @@ const ScholarshipDetails = () => {
     postGraduationWorkPermit,
   } = scholarship;
 
-  const { data: hasApplied,refetch } = useQuery({
+  const { data: hasApplied, refetch } = useQuery({
     queryKey: ['user-applied', id, user?.email],
     enabled: !!user?.email && !!id,
     queryFn: async () => {
@@ -57,7 +58,7 @@ const ScholarshipDetails = () => {
   }
 
 
-  const handlePayment = () => {
+  const handlePayment = async () => {
     const applicationData = {
       scholarshipId: id,
       userName: user.displayName,
@@ -69,19 +70,43 @@ const ScholarshipDetails = () => {
       serviceCharge: serviceCharge,
       applicationStatus: 'pending',
       paymentStatus: 'unpaid',
-     
+
 
     };
-    axiosSecure.post("/apply-scholarships", applicationData)
-      .then((res) => {
-        if (res.data.insertedId) {
-          refetch()
-          toast.success(
-            "Apply successful, Please visit your dashboard for payment"
-          );
-        };
-      });
-  };
+    Swal.fire({
+      title: `Apply to ${universityName}`,
+      text: `Are You sure want to apply here! Total Cost $${applicationFees + serviceCharge
+        }`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Confirm",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axiosSecure
+          .post("/apply-scholarships", applicationData)
+          .then(async (res) => {
+            if (res.data.insertedId) {
+              refetch();
+              const paymentInfo = {
+                charge: applicationFees + serviceCharge,
+                universityName: universityName,
+                studentEmail: user.email,
+                scholarshipId: id,
+                applicationId: res.data.insertedId,
+              };
+              const paymentRes = await axiosSecure.post(
+                "/scholarship-payment-checkout",
+                paymentInfo
+              );
+              window.location.assign(paymentRes.data.url);
+            }
+          });
+      }
+    });
+  }
+
 
   const formatFees = (fee) => {
     if (fee === undefined || fee === null) return "N/A";
