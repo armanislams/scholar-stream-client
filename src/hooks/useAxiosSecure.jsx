@@ -5,7 +5,7 @@ import useAuth from './useAuth';
 
 const axiosSecure = axios.create({
   baseURL: "http://localhost:3000",
-  // baseURL: "https://zap-shift-server-iota-indol.vercel.app",
+  // baseURL: "https://scholar-stream-backend.vercel.app",
 });
 
 const useAxiosSecure = () => {

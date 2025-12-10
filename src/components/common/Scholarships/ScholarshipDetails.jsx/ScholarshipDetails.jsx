@@ -3,17 +3,26 @@ import React from "react";
 import { Link, useParams } from "react-router";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import Loader from "../../Loader/Loader";
+import dayjs from "dayjs";
+import useAuth from "../../../../hooks/useAuth";
+import { toast } from "react-toastify";
+import { PiNoteThin } from "react-icons/pi";
 
 const ScholarshipDetails = () => {
   const { id } = useParams();
   const axiosSecure = useAxiosSecure();
-  const { data: scholarship = [] , isLoading} = useQuery({
+  const { user } = useAuth()
+
+
+  const { data: scholarship = [], isLoading } = useQuery({
     queryKey: ["scholarship-details"],
     queryFn: async () => {
       const res = await axiosSecure.get(`/scholarships/${id}`);
       return res.data;
     },
   });
+
+
 
   const {
     scholarshipName,
@@ -34,24 +43,58 @@ const ScholarshipDetails = () => {
     postGraduationWorkPermit,
   } = scholarship;
 
+  const { data: hasApplied,refetch } = useQuery({
+    queryKey: ['user-applied', id, user?.email],
+    enabled: !!user?.email && !!id,
+    queryFn: async () => {
+      const appliedRes = await axiosSecure.get(`/applied-scholarships/${user?.email}`);
+      return appliedRes.data.some(application => application.scholarshipId === id);
+    }
+  });
+
+  if (isLoading) {
+    return <Loader />;
+  }
+
+
+  const handlePayment = () => {
+    const applicationData = {
+      scholarshipId: id,
+      userName: user.displayName,
+      userEmail: user.email,
+      universityName: universityName,
+      scholarshipCategory: scholarshipCategory,
+      degree: degree,
+      applicationFees: applicationFees,
+      serviceCharge: serviceCharge,
+      applicationStatus: 'pending',
+      paymentStatus: 'unpaid',
+     
+
+    };
+    axiosSecure.post("/apply-scholarships", applicationData)
+      .then((res) => {
+        if (res.data.insertedId) {
+          refetch()
+          toast.success(
+            "Apply successful, Please visit your dashboard for payment"
+          );
+        };
+      });
+  };
+
   const formatFees = (fee) => {
     if (fee === undefined || fee === null) return "N/A";
     return fee === 0 ? "Free" : `$${fee.toLocaleString()}`;
   };
 
   const formatDate = (dateString) => {
-    if (!dateString) return "Not specified";
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
+    // if (!dateString) return "Not specified";
+    return dayjs(dateString).format("DD MMMM YYYY")
   };
 
-  if (isLoading) {
-    return <Loader/>
-  }
+
+
 
   return (
     <div className="min-h-screen bg-base-100 py-8">
@@ -400,23 +443,25 @@ const ScholarshipDetails = () => {
                 <div className="divider"></div>
 
                 {/* Apply Button */}
-                <button className="btn btn-primary btn-block btn-lg">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
+                {hasApplied ? (
+                  <button
+                    className="btn py-7 flex flex-col text-white btn-block btn-lg"
+                    disabled
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                    />
-                  </svg>
-                  Apply Now
-                </button>
+                    <span className="text-md">Already applied</span>
+                    <span className="text-xs">
+                      visit dashboard for more info
+                    </span>
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => handlePayment()}
+                    className="btn btn-primary btn-block btn-lg"
+                  >
+                    <PiNoteThin />
+                    Apply Now
+                  </button>
+                )}
 
                 <p className="text-xs text-center text-base-content/60 mt-2">
                   {appliedScholarshipNumber || 0} students have applied
