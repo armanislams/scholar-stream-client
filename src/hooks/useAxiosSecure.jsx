@@ -27,9 +27,14 @@ const useAxiosSecure = () => {
 
       const statusCode = error.response?.status;;
       // const statusCode = error.status;
-      if (statusCode == 401 || statusCode == 403) {
-        navigate('/401')
+      if (statusCode == 401) {
+        navigate('/unauthorized')
       }
+      if (statusCode == 403) {
+        navigate('/forbidden')
+      }
+
+      
 
       return Promise.reject(error);
 

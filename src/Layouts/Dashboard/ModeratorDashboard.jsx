@@ -6,7 +6,7 @@ const ModeratorDashboard = () => {
     return (
         <>
             <li>
-                <NavLink to="/dashboard/profile">
+                <NavLink to="/dashboard/my-profile">
                     <PiUser className="w-5 h-5" />
                     My Profile
                 </NavLink>

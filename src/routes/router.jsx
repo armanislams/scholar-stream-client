@@ -19,6 +19,9 @@ import Error from "../pages/Errors/Error";
 import Forbidden from "../pages/Errors/Forbidden";
 import Unauthorized from "../pages/Errors/Unauthorized";
 import MainDashboard from "../Layouts/Dashboard/MainDashboard";
+import MyProfile from "../pages/Dashboard/common/MyProfile";
+import MyApplications from "../components/Student/MyApplications";
+import DashboardHome from "../pages/Dashboard/DashboardHome";
 
 const router = createBrowserRouter([
   {
@@ -96,7 +99,23 @@ const router = createBrowserRouter([
   },
   {
     path: '/dashboard',
-    Component: MainDashboard
+    element: <PrivateRoutes>
+      <MainDashboard/>
+    </PrivateRoutes>,
+    children: [
+      {
+        index: true,
+        Component: DashboardHome
+    },
+      {
+        path: 'my-profile',
+        Component: MyProfile
+      },
+      {
+        path: 'my-applications',
+        Component: MyApplications
+      }
+    ]
   }
 ]);
 
