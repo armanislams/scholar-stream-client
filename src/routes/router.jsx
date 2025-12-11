@@ -22,6 +22,8 @@ import MainDashboard from "../Layouts/Dashboard/MainDashboard";
 import MyProfile from "../pages/Dashboard/common/MyProfile";
 import MyApplications from "../components/Student/MyApplications";
 import DashboardHome from "../pages/Dashboard/DashboardHome";
+import PaymentFailed from "../pages/Payments/PaymentFailed";
+import MyReviews from "../components/Student/MyReviews";
 
 const router = createBrowserRouter([
   {
@@ -95,6 +97,10 @@ const router = createBrowserRouter([
         path: '/payment-success',
         Component: PaymentSuccess
       },
+      {
+        path: '/payment-cancelled',
+        Component: PaymentFailed
+      },
     ],
   },
   {
@@ -114,7 +120,11 @@ const router = createBrowserRouter([
       {
         path: 'my-applications',
         Component: MyApplications
-      }
+      },
+      {
+        path: 'my-reviews',
+        Component: MyReviews
+      },
     ]
   }
 ]);

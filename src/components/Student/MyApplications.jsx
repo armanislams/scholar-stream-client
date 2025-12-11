@@ -128,21 +128,22 @@ console.log(applications);
                 <th>University Name</th>
                 <th>Category</th>
                 <th>Fees</th>
-                <th>Status</th>
+                <th>Application Status</th>
+                <th>Payment Status</th>
                 <th>Feedback</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
               {applications.map((app) => (
-                <tr key={app._id}>
+                <tr key={app._id} className="text-center">
                   <td>
-                    <div className="font-bold">{app.universityName}</div>
+                    <div className="font-bold text-left items-center">{app.universityName}</div>
                     <div className="text-sm opacity-50">
                       {app.universityCountry}
                     </div>
                   </td>
-                  <td>{app.subjectCategory}</td>
+                  <td>{app.scholarshipCategory}</td>
                   <td>${app.applicationFees}</td>
                   <td>
                     <div
@@ -157,9 +158,19 @@ console.log(applications);
                           : "badge-warning"
                       } gap-2 capitalize`}
                     >
-                      {app.applicationStatus || "pending"}
+                      {app.applicationStatus}
                     </div>
                   </td>
+                  <td
+                    className={`badge ${
+                      app.paymentStatus === "paid"
+                        ? "badge-success"
+                        : "badge-warning"
+                    }`}
+                  >
+                    {app.paymentStatus}
+                  </td>
+
                   <td>
                     {app.feedback ? (
                       <span
@@ -199,12 +210,14 @@ console.log(applications);
                           <PiTrash className="text-lg text-error" />
                         </button>
                         {/* Only allow pay if unpaid logic? Assuming applicationFees > 0 implies payment needed usually, but logic says pending + unpaid */}
-                        <button
-                          className="btn btn-ghost btn-xs tooltip"
-                          data-tip="Pay"
-                        >
-                          <PiCreditCard className="text-lg text-success" />
-                        </button>
+                        {app.paymentStatus === "unpaid" && (
+                          <button
+                            className="btn btn-ghost btn-xs tooltip"
+                            data-tip="Pay"
+                          >
+                            <PiCreditCard className="text-lg text-success" />
+                          </button>
+                        )}
                       </>
                     )}
 
@@ -243,6 +256,9 @@ console.log(applications);
                 <p>
                   <strong>Degree:</strong> {selectedApp.degree}
                 </p>
+                <p>
+                  <strong>Category:</strong> {selectedApp.scholarshipCategory}
+                </p>
               </div>
               <div>
                 <p>
@@ -253,7 +269,7 @@ console.log(applications);
                 </p>
                 <p>
                   <strong>Date:</strong>{" "}
-                  {dayjs(selectedApp.applicationDate).format('DD MMMM YYYY')}
+                  {dayjs(selectedApp.applicationDate).format("DD MMMM YYYY")}
                 </p>
               </div>
               <div className="col-span-2 mt-4">
