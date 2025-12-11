@@ -11,6 +11,7 @@ const AllScholarships = () => {
     useState("");
   const [selectedSubjectCategory, setSelectedSubjectCategory] = useState("");
   const [selectedLocation, setSelectedLocation] = useState("");
+  const [sortType, setSortType] = useState("dateDesc");
   const [currentPage, setCurrentPage] = useState(1);
 
   const handleSearchChange = (e) => {
@@ -33,13 +34,20 @@ const AllScholarships = () => {
     setCurrentPage(1);
   };
 
+  const handleSortChange = (e) => {
+    setSortType(e.target.value);
+    setCurrentPage(1);
+  };
+
   const { data: paginatedData, isLoading } = useQuery({
     queryKey: [
       "scholarships",
       searchText,
       selectedScholarshipCategory,
       selectedSubjectCategory,
+      selectedSubjectCategory,
       selectedLocation,
+      sortType,
       currentPage,
     ],
     queryFn: async () => {
@@ -53,6 +61,7 @@ const AllScholarships = () => {
         params.append("subjectCategory", selectedSubjectCategory);
       if (selectedLocation)
         params.append("universityCountry", selectedLocation);
+      if (sortType) params.append("sortType", sortType);
 
       // Add pagination parameters
       params.append("page", currentPage);
@@ -95,7 +104,9 @@ const AllScholarships = () => {
     setSearchText("");
     setSelectedScholarshipCategory("");
     setSelectedSubjectCategory("");
+    setSelectedSubjectCategory("");
     setSelectedLocation("");
+    setSortType("dateDesc");
     setCurrentPage(1);
   };
 
@@ -200,7 +211,7 @@ const AllScholarships = () => {
             </div>
 
             {/* Filter Dropdowns */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
               {/* Scholarship Category Filter */}
               <select
                 value={selectedScholarshipCategory}
@@ -241,6 +252,18 @@ const AllScholarships = () => {
                     {location}
                   </option>
                 ))}
+              </select>
+
+              {/* Sort Dropdown */}
+              <select
+                value={sortType}
+                onChange={handleSortChange}
+                className="select select-bordered w-full hover:cursor-pointer"
+              >
+                <option value="dateDesc">Newest First</option>
+                <option value="dateAsc">Oldest First</option>
+                <option value="feesAsc">Fees (Low to High)</option>
+                <option value="feesDesc">Fees (High to Low)</option>
               </select>
             </div>
 
@@ -300,8 +323,7 @@ const AllScholarships = () => {
                     scholarship{totalCount !== 1 ? "s" : ""}
                     {searchText && ` matching "${searchText}"`}
                     {activeFiltersCount > 0 &&
-                      ` with ${activeFiltersCount} filter${
-                        activeFiltersCount !== 1 ? "s" : ""
+                      ` with ${activeFiltersCount} filter${activeFiltersCount !== 1 ? "s" : ""
                       } applied`}
                   </>
                 ) : (
@@ -339,9 +361,8 @@ const AllScholarships = () => {
               <div className="join">
                 {/* Previous Button */}
                 <button
-                  className={`join-item btn btn-sm ${
-                    currentPage === 1 ? "hidden" : "block"
-                  }`}
+                  className={`join-item btn btn-sm ${currentPage === 1 ? "hidden" : "block"
+                    }`}
                   onClick={() => handlePageChange(currentPage - 1)}
                 >
                   «
@@ -359,9 +380,8 @@ const AllScholarships = () => {
                   ) : (
                     <button
                       key={page}
-                      className={`join-item btn btn-sm ${
-                        currentPage === page ? "btn-active btn-primary" : ""
-                      }`}
+                      className={`join-item btn btn-sm ${currentPage === page ? "btn-active btn-primary" : ""
+                        }`}
                       onClick={() => handlePageChange(page)}
                     >
                       {page}
@@ -371,9 +391,8 @@ const AllScholarships = () => {
 
                 {/* Next Button */}
                 <button
-                  className={`join-item btn btn-sm ${
-                    currentPage === totalPages ? "hidden" : "block"
-                  }`}
+                  className={`join-item btn btn-sm ${currentPage === totalPages ? "hidden" : "block"
+                    }`}
                   onClick={() => handlePageChange(currentPage + 1)}
                 >
                   »

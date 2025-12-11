@@ -121,6 +121,53 @@ const HomeLayout = () => {
             {/* Testimonials Section */}
             <Testimonials />
 
+            {/* FAQ Section */}
+            <section className="py-20 bg-base-200/50">
+                <div className="container mx-auto px-6 max-w-4xl">
+                    <div className="text-center mb-12">
+                        <h2 className="text-4xl font-bold mb-4">Frequently Asked <span className="gradient-text">Questions</span></h2>
+                        <p className="text-base-content/60">Got questions? We've got answers.</p>
+                    </div>
+                    <div className="join join-vertical w-full bg-base-100 shadow-xl rounded-2xl border border-base-200">
+                        <div className="collapse collapse-plus join-item border-b border-base-200">
+                            <input type="radio" name="my-accordion-4" defaultChecked />
+                            <div className="collapse-title text-xl font-medium">
+                                How do I apply for a scholarship?
+                            </div>
+                            <div className="collapse-content">
+                                <p className="opacity-70">Simply create an account, browse our extensive list of scholarships, select the one that fits you, and click 'Apply'. You'll need to pay any application fees via our secure payment gateway.</p>
+                            </div>
+                        </div>
+                        <div className="collapse collapse-plus join-item border-b border-base-200">
+                            <input type="radio" name="my-accordion-4" />
+                            <div className="collapse-title text-xl font-medium">
+                                What documents are required?
+                            </div>
+                            <div className="collapse-content">
+                                <p className="opacity-70">Usually, you'll need academic transcripts, a statement of purpose, and identification. Specific requirements vary by scholarship and university.</p>
+                            </div>
+                        </div>
+                        <div className="collapse collapse-plus join-item border-b border-base-200">
+                            <input type="radio" name="my-accordion-4" />
+                            <div className="collapse-title text-xl font-medium">
+                                Is ScholarStream free to use?
+                            </div>
+                            <div className="collapse-content">
+                                <p className="opacity-70">Browsing is free! Some scholarships have application processing fees which are clearly listed on the details page. We ensure transparent pricing.</p>
+                            </div>
+                        </div>
+                        <div className="collapse collapse-plus join-item">
+                            <input type="radio" name="my-accordion-4" />
+                            <div className="collapse-title text-xl font-medium">
+                                Can I edit my application after submission?
+                            </div>
+                            <div className="collapse-content">
+                                <p className="opacity-70">You can edit your application details only while it is in 'Pending' status. Once a moderator starts processing it, it cannot be modified to ensure integrity.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
             {/* CTA Section */}
             <section className="py-10 gradient-primary relative overflow-hidden mt-10 rounded-md">
