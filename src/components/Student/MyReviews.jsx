@@ -10,7 +10,7 @@ const MyReviews = () => {
     const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
     const [selectedReview, setSelectedReview] = useState(null);
-    const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm();
+    const { register, handleSubmit, setValue, formState: { errors } } = useForm();
 
     const { data: reviews = [], refetch, isLoading } = useQuery({
         queryKey: ['my-reviews', user?.email],
