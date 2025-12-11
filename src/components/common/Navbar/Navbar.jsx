@@ -15,6 +15,10 @@ const Navbar = () => {
     <>
       <li><NavLink to={'/'} className="hover:text-purple-600 transition-colors">Home</NavLink></li>
       <li><NavLink to={'/all-scholarships'} className="hover:text-purple-600 transition-colors">All Scholarships</NavLink></li>
+      <li><NavLink to={'/how-it-works'} className="hover:text-purple-600 transition-colors">How It Works</NavLink></li>
+      <li><NavLink to={'/blog'} className="hover:text-purple-600 transition-colors">Blog</NavLink></li>
+      <li><NavLink to={'/contact-us'} className="hover:text-purple-600 transition-colors">Contact Us</NavLink></li>
+      {user && <li><NavLink to={'/dashboard'} className="hover:text-purple-600 transition-colors">Dashboard</NavLink></li>}
     </>
   );
   return (

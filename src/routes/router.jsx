@@ -14,10 +14,17 @@ import HelpCenter from "../pages/FooterPages/HelpCenter";
 import ContactUs from "../pages/FooterPages/ContactUs";
 import SuccessStories from "../pages/FooterPages/SuccessStories";
 import PrivacyPolicy from "../pages/FooterPages/PrivacyPolicy";
+import Loader from "../components/common/Loader/Loader";
+import Error from "../pages/Errors/Error";
+import Forbidden from "../pages/Errors/Forbidden";
+import Unauthorized from "../pages/Errors/Unauthorized";
+import MainDashboard from "../Layouts/Dashboard/MainDashboard";
 
 const router = createBrowserRouter([
   {
     path: "/",
+    hydrateFallbackElement: <Loader />,
+    errorElement: <Error/>,
     Component: Root,
     children: [
       {
@@ -60,10 +67,20 @@ const router = createBrowserRouter([
         path: '/privacy-policy',
         Component: PrivacyPolicy
       },
+      {
+        path: '/forbidden',
+        Component: Forbidden
+      },
+      {
+        path: '/unauthorized',
+        Component: Unauthorized
+      },
       
       {
         path: '/all-scholarships',
-        Component: AllScholarships
+        element: <PrivateRoutes>
+          <AllScholarships/>
+        </PrivateRoutes>
       },
       {
         path: '/scholarship-details/:id',
@@ -77,6 +94,10 @@ const router = createBrowserRouter([
       },
     ],
   },
+  {
+    path: '/dashboard',
+    Component: MainDashboard
+  }
 ]);
 
 export default router;
