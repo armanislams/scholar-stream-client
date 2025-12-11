@@ -64,14 +64,12 @@ const ScholarshipDetails = () => {
       userName: user.displayName,
       userEmail: user.email,
       universityName: universityName,
+      universityCountry: universityCountry,
       scholarshipCategory: scholarshipCategory,
       degree: degree,
-      applicationFees: applicationFees,
-      serviceCharge: serviceCharge,
-      applicationStatus: 'pending',
-      paymentStatus: 'unpaid',
-
-
+      applicationFees: applicationFees + serviceCharge,
+      applicationStatus: "pending",
+      paymentStatus: "unpaid",
     };
     Swal.fire({
       title: `Apply to ${universityName}`,

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import useAuth from "../../../hooks/useAuth";
-import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import useAuth from "../../hooks/useAuth";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router";
 import Swal from "sweetalert2";
@@ -12,6 +12,7 @@ import {
   PiStar,
 } from "react-icons/pi";
 import { useForm } from "react-hook-form";
+import dayjs from "dayjs";
 
 const MyApplications = () => {
   const { user } = useAuth();
@@ -37,6 +38,7 @@ const MyApplications = () => {
       return res.data;
     },
   });
+console.log(applications);
 
   // Delete Application
   const handleDelete = (id) => {
@@ -137,7 +139,7 @@ const MyApplications = () => {
                   <td>
                     <div className="font-bold">{app.universityName}</div>
                     <div className="text-sm opacity-50">
-                      {app.universityCity}, {app.universityCountry}
+                      {app.universityCountry}
                     </div>
                   </td>
                   <td>{app.subjectCategory}</td>
@@ -239,9 +241,6 @@ const MyApplications = () => {
                   <strong>University:</strong> {selectedApp.universityName}
                 </p>
                 <p>
-                  <strong>Subject:</strong> {selectedApp.subjectCategory}
-                </p>
-                <p>
                   <strong>Degree:</strong> {selectedApp.degree}
                 </p>
               </div>
@@ -254,7 +253,7 @@ const MyApplications = () => {
                 </p>
                 <p>
                   <strong>Date:</strong>{" "}
-                  {new Date(selectedApp.applicationDate).toLocaleDateString()}
+                  {dayjs(selectedApp.applicationDate).format('DD MMMM YYYY')}
                 </p>
               </div>
               <div className="col-span-2 mt-4">

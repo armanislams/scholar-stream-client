@@ -83,7 +83,7 @@ const PaymentSuccess = () => {
           </div>
 
           <div className="card-actions justify-center">
-            <Link to="/my-applications" className="btn btn-primary btn-wide">
+            <Link to="/dashboard/my-applications" className="btn btn-primary btn-wide">
               Go to My Applications
             </Link>
           </div>
