@@ -143,7 +143,7 @@ const router = createBrowserRouter([
         Component: ManageUsers
       },
       {
-        path: 'manage-application',
+        path: 'manage-applications',
         Component: ManageApplications
       },
       {

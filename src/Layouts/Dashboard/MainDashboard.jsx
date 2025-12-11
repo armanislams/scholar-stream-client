@@ -106,7 +106,7 @@ const MainDashboard = () => {
           <div className="divider my-4"></div>
 
           <li>
-            <NavLink to="/">
+            <NavLink to="/dashboard">
               <PiHouse className="w-5 h-5" />
               Home
             </NavLink>

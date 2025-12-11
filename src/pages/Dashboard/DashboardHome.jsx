@@ -35,6 +35,8 @@ const DashboardHome = () => {
             return res.data;
         }
     });
+    console.log(chartData);
+    
 
     if (isLoading) return <div className="flex justify-center p-10"><span className="loading loading-spinner loading-lg"></span></div>;
 
