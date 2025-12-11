@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import useAuth from "../../../hooks/useAuth";
 import GLogin from "../SocialLogin/GLogin";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import Swal from "sweetalert2";
 
 const Login = () => {
     const [show,setShow]=useState(false)
@@ -13,7 +14,7 @@ const Login = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const { signIn } = useAuth();
+  const { signIn,resetPass } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
   const handleSignIn = (data) => {
@@ -30,6 +31,24 @@ const Login = () => {
     const handleShow = () => {
         setShow(!show)
     }
+
+    const handleResetPass = async () => {
+        const { value: email } = await Swal.fire({
+          title: "Input email address",
+          input: "email",
+          inputLabel: "Your email address",
+          inputPlaceholder: "Enter your email address",
+        });
+        if (email) {
+          resetPass(email)
+            .then(() => {
+              Swal.fire(`Reset link has been sent to: ${email}`);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }
+        };
   return (
     <div className="card bg-base-100 w-full mx-auto max-w-sm my-5 shrink-0 py-5 shadow-2xl">
       <h3 className="text-3xl text-center">Welcome Back</h3>
@@ -79,7 +98,7 @@ const Login = () => {
           </div>
 
           <div>
-            <a className="link link-hover">Forgot password?</a>
+            <p onClick={handleResetPass} className="link link-hover">Forgot password?</p>
           </div>
           <button className="btn btn-neutral mt-4">Login</button>
         </fieldset>

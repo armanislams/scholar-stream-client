@@ -12,10 +12,9 @@ const TopScholarships = () => {
             return res.data
         }
     })
-    console.log(topScholarships);
     
     return (
-      <div class="group mt-10 bg-gray-900/95 border border-purple-800/30 rounded-2xl p-6 hover:bg-gray-900 hover:border-purple-500/50 transition-all duration-300 shadow-md shadow-black/30 hover:shadow-purple-500/10">
+      <div className="group mt-10 bg-gray-900/95 border border-purple-800/30 rounded-2xl p-6 hover:bg-gray-900 hover:border-purple-500/50 transition-all duration-300 shadow-md shadow-black/30 hover:shadow-purple-500/10">
         <h3 className="text-2xl text-center py-5 font-bold bg-linear-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
           Our Top Scholarship
         </h3>

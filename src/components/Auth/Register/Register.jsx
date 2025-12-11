@@ -7,6 +7,7 @@ import axios from "axios";
 import GLogin from "../SocialLogin/GLogin";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 
 const Register = () => {
   const [show, setShow] = useState(false);
@@ -19,7 +20,7 @@ const Register = () => {
   const navigate = useNavigate();
   const axiosSecure = useAxiosSecure();
 
-  const { register: registerUser, updateUser } = useAuth();
+  const { register: registerUser, updateUser, resetPass } = useAuth();
   const handleRegister = (data) => {
     const profileImage = data.photo[0];
     registerUser(data.email, data.password).then(() => {
@@ -41,9 +42,9 @@ const Register = () => {
           photoURL: photoURL,
         };
         axiosSecure.post("/users", userInfo).then((res) => {
-            if (res.data.insertedId) {
-              toast.success('Successfully Registered')
-          };
+          if (res.data.insertedId) {
+            toast.success("Successfully Registered");
+          }
         });
 
         ///update user
@@ -64,6 +65,26 @@ const Register = () => {
   const handleShow = () => {
     setShow(!show);
   };
+
+  const handleResetPass = async () => {
+    const { value: email } = await Swal.fire({
+      title: "Input email address",
+      input: "email",
+      inputLabel: "Your email address",
+      inputPlaceholder: "Enter your email address",
+    });
+    if (email) {
+      resetPass(email)
+        .then(() => {
+          Swal.fire(`Reset link has been sent to: ${email}`);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+    };
+    
+
   return (
     <div className="card mt-5 py-5 bg-base-100 w-full mx-auto max-w-sm shrink-0 shadow-2xl">
       <h3 className="text-3xl text-center">Welcome To ScholarStream</h3>
@@ -110,7 +131,8 @@ const Register = () => {
               {...register("password", {
                 required: "Password is required",
                 pattern: {
-                  value: /(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[^a-zA-Z0-9])(.{6,})/,
+                  value:
+                    /(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[^a-zA-Z0-9])(.{6,})/,
                   message:
                     "Password must be 6+ characters, include a uppercase,a lowercase, a number and a special character.",
                 },
@@ -128,14 +150,12 @@ const Register = () => {
             {errors.password && (
               <p className="text-red-500">{errors.password.message}</p>
             )}
-
-            {errors.password?.type === "minLength" && (
-              <p className="text-red-500">Password Must Be 6 digit</p>
-            )}
           </div>
 
           <div>
-            <a className="link link-hover">Forgot password?</a>
+            <p onClick={handleResetPass} className="link link-hover">
+              Forgot password?
+            </p>
           </div>
           <button className="btn btn-neutral mt-4">Register</button>
         </fieldset>
