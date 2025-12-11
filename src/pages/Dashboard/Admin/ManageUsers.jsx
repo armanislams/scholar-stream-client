@@ -2,10 +2,13 @@ import React, { useState } from "react";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
-import { PiTrash, PiUserGear, PiUserList, PiUserSwitch } from "react-icons/pi";
+import { PiTrash, PiUserCheck, PiUserGear, PiUserList, PiUserSwitch } from "react-icons/pi";
+import useAuth from "../../../hooks/useAuth";
+import { toast } from "react-toastify";
 
 const ManageUsers = () => {
   const axiosSecure = useAxiosSecure();
+  const { user: currentUser } = useAuth()
   const [filterRole, setFilterRole] = useState("");
 
   const {
@@ -65,7 +68,7 @@ const ManageUsers = () => {
     );
 
   return (
-    <div className="card bg-base-100 shadow-xl">
+    <div className="card bg-base-100 shadow-xl h-full">
       <div className="card-body">
         <div className="flex justify-between items-center mb-6">
           <h2 className="card-title text-2xl">
@@ -101,7 +104,7 @@ const ManageUsers = () => {
                   <td>
                     <div
                       className={`badge ${
-                        user.role === "admin"
+                        user.role === "admin" || user.role === "super-admin"
                           ? "badge-primary"
                           : user.role === "moderator"
                           ? "badge-secondary"
@@ -111,51 +114,70 @@ const ManageUsers = () => {
                       {user.role}
                     </div>
                   </td>
-                  <td className="flex gap-2 items-center flex-wrap">
+                  <td
+                    className={`flex gap-2 items-center flex-wrap ${
+                      user.role === "super-admin" && "hidden"
+                    }`}
+                  >
                     {/* Simplified Actions with Dropdown or Buttons */}
-                    <div className="dropdown dropdown-left dropdown-hover">
-                      <div
-                        tabIndex={0}
-                        role="button"
-                        className="btn btn-ghost btn-xs"
+                    {user.email === currentUser.email ? (
+                      <button
+                        onClick={() =>
+                          toast.error(
+                            "Cannot change own-self, Please contact admin"
+                          )
+                        }
+                        className="btn btn-ghost btn-xs text-warning"
                       >
-                        <PiUserSwitch className="text-lg" />
+                        <PiUserCheck />
+                      </button>
+                    ) : (
+                      <div className="dropdown dropdown-left dropdown-hover ">
+                        <div
+                          tabIndex={0}
+                          role="button"
+                          className="btn btn-ghost btn-xs"
+                        >
+                          <PiUserSwitch className="text-lg" />
+                        </div>
+                        <ul
+                          tabIndex={0}
+                          className="dropdown-content z-1 menu p-2 shadow bg-base-100 rounded-box w-52"
+                        >
+                          <li>
+                            <button
+                              onClick={() =>
+                                handleRoleChange(user._id, "student")
+                              }
+                            >
+                              Make Student
+                            </button>
+                          </li>
+                          <li>
+                            <button
+                              onClick={() =>
+                                handleRoleChange(user._id, "moderator")
+                              }
+                            >
+                              Make Moderator
+                            </button>
+                          </li>
+                          <li>
+                            <button
+                              onClick={() =>
+                                handleRoleChange(user._id, "admin")
+                              }
+                            >
+                              Make Admin
+                            </button>
+                          </li>
+                        </ul>
                       </div>
-                      <ul
-                        tabIndex={0}
-                        className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
-                      >
-                        <li>
-                          <button
-                            onClick={() =>
-                              handleRoleChange(user._id, "student")
-                            }
-                          >
-                            Make Student
-                          </button>
-                        </li>
-                        <li>
-                          <button
-                            onClick={() =>
-                              handleRoleChange(user._id, "moderator")
-                            }
-                          >
-                            Make Moderator
-                          </button>
-                        </li>
-                        <li>
-                          <button
-                            onClick={() => handleRoleChange(user._id, "admin")}
-                          >
-                            Make Admin
-                          </button>
-                        </li>
-                      </ul>
-                    </div>
+                    )}
 
                     <button
                       onClick={() => handleDelete(user._id)}
-                      className="btn btn-ghost btn-xs tooltip"
+                      className='btn btn-ghost btn-xs tooltip'
                       data-tip="Delete User"
                     >
                       <PiTrash className="text-lg text-error" />

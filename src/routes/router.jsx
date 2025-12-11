@@ -24,6 +24,11 @@ import MyApplications from "../components/Student/MyApplications";
 import DashboardHome from "../pages/Dashboard/DashboardHome";
 import PaymentFailed from "../pages/Payments/PaymentFailed";
 import MyReviews from "../components/Student/MyReviews";
+import AddScholarship from "../pages/Dashboard/Admin/AddScholarship";
+import ManageScholarships from "../pages/Dashboard/Admin/ManageScholarships";
+import ManageUsers from "../pages/Dashboard/Admin/ManageUsers";
+import ManageApplications from "../pages/Dashboard/Moderator/ManageApplications";
+import AllReviews from "../pages/Dashboard/Moderator/AllReviews";
 
 const router = createBrowserRouter([
   {
@@ -124,6 +129,26 @@ const router = createBrowserRouter([
       {
         path: 'my-reviews',
         Component: MyReviews
+      },
+      {
+        path: 'add-scholarship',
+        Component: AddScholarship
+      },
+      {
+        path: 'manage-scholarships',
+        Component: ManageScholarships
+      },
+      {
+        path: 'manage-users',
+        Component: ManageUsers
+      },
+      {
+        path: 'manage-application',
+        Component: ManageApplications
+      },
+      {
+        path: 'all-reviews',
+        Component: AllReviews
       },
     ]
   }

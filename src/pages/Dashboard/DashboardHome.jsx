@@ -27,6 +27,15 @@ const DashboardHome = () => {
         }
     });
 
+    const { data: chartData = [] } = useQuery({
+        queryKey: ['admin-chart'],
+        enabled: role === 'admin' || role === 'super-admin',
+        queryFn: async () => {
+            const res = await axiosSecure.get('/analytics/chart-data');
+            return res.data;
+        }
+    });
+
     if (isLoading) return <div className="flex justify-center p-10"><span className="loading loading-spinner loading-lg"></span></div>;
 
     const renderStats = () => {
@@ -162,6 +171,27 @@ const DashboardHome = () => {
             </div>
 
             {renderStats()}
+
+            {(role === 'admin' || role === 'super-admin') && chartData.length > 0 && (
+                <div className="card bg-base-100 shadow-xl mt-8">
+                    <div className="card-body">
+                        <h2 className="card-title text-2xl mb-6">Applications by Subject Category</h2>
+                        <div className="flex flex-wrap items-end justify-center gap-8 h-64 p-4 border-b border-base-200">
+                            {chartData.map((d, index) => (
+                                <div key={index} className='flex flex-col items-center gap-2 group w-16'>
+                                    <div
+                                        className='w-12 bg-primary rounded-t-lg transition-all duration-500 hover:bg-secondary relative flex items-end justify-center'
+                                        style={{ height: `${(d.value / Math.max(...chartData.map(i => i.value))) * 180}px`, minHeight: '20px' }}
+                                    >
+                                        <span className="text-white text-xs font-bold mb-1 opacity-0 group-hover:opacity-100 transition-opacity">{d.value}</span>
+                                    </div>
+                                    <div className='text-xs font-bold text-center w-20 truncate' title={d.name}>{d.name}</div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

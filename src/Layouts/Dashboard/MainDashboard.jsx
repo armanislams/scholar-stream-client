@@ -7,6 +7,7 @@ import AdminDashboard from "./AdminDashboard";
 import ModeratorDashboard from "./ModeratorDashboard";
 import StudentDashboard from "./StudentDashboard";
 import Loader from "../../components/common/Loader/Loader";
+import { ToastContainer } from "react-toastify";
 
 const MainDashboard = () => {
   const { user, logOut } = useAuth();
@@ -117,7 +118,8 @@ const MainDashboard = () => {
             </button>
           </li>
         </ul>
-      </div>
+          </div>
+          <ToastContainer/>
     </div>
   );
 };
