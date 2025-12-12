@@ -7,8 +7,10 @@ import {
   PiUsersThree,
   PiChartBar,
 } from "react-icons/pi";
+import useRole from "../../hooks/useRole";
 
 const AdminDashboard = () => {
+  const {role} = useRole()
   return (
     <>
       <li>
@@ -30,19 +32,20 @@ const AdminDashboard = () => {
           Manage Scholarships
         </NavLink>
       </li>
-      <li>
-        <NavLink to="/dashboard/manage-applications">
-          <PiFiles className="w-5 h-5" />
-          Manage Applications
-        </NavLink>
-      </li>
+      {role === "super-admin" && (
+        <li>
+          <NavLink to="/dashboard/manage-applications">
+            <PiFiles className="w-5 h-5" />
+            Manage Applications
+          </NavLink>
+        </li>
+      )}
       <li>
         <NavLink to="/dashboard/manage-users">
           <PiUsersThree className="w-5 h-5" />
           Manage Users
         </NavLink>
       </li>
-     
     </>
   );
 };
