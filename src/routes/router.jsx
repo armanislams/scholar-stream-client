@@ -29,12 +29,14 @@ import ManageScholarships from "../pages/Dashboard/Admin/ManageScholarships";
 import ManageUsers from "../pages/Dashboard/Admin/ManageUsers";
 import ManageApplications from "../pages/Dashboard/Moderator/ManageApplications";
 import AllReviews from "../pages/Dashboard/Moderator/AllReviews";
+import AdminRoute from "../contexts/ProtecedRoutes/AdminRoute";
+import ModeratorRoute from "../contexts/ProtecedRoutes/ModeratorRoute";
 
 const router = createBrowserRouter([
   {
     path: "/",
     hydrateFallbackElement: <Loader />,
-    errorElement: <Error/>,
+    errorElement: <Error />,
     Component: Root,
     children: [
       {
@@ -42,116 +44,142 @@ const router = createBrowserRouter([
         Component: HomeLayout,
       },
       {
-        path: '/login',
-        Component: Login
+        path: "/login",
+        Component: Login,
       },
       {
-        path: '/register',
-        Component: Register
+        path: "/register",
+        Component: Register,
       },
       {
-        path: '/how-it-works',
-        Component: HowItWorks
+        path: "/how-it-works",
+        Component: HowItWorks,
       },
       {
-        path: '/faq',
-        Component: LearnMore
+        path: "/faq",
+        Component: LearnMore,
       },
       {
-        path: '/blog',
-        Component: Blog
+        path: "/blog",
+        Component: Blog,
       },
       {
-        path: '/help-center',
-        Component: HelpCenter
+        path: "/help-center",
+        Component: HelpCenter,
       },
       {
-        path: '/contact-us',
-        Component: ContactUs
+        path: "/contact-us",
+        Component: ContactUs,
       },
       {
-        path: '/success-stories',
-        Component: SuccessStories
+        path: "/success-stories",
+        Component: SuccessStories,
       },
       {
-        path: '/privacy-policy',
-        Component: PrivacyPolicy
+        path: "/privacy-policy",
+        Component: PrivacyPolicy,
       },
       {
-        path: '/forbidden',
-        Component: Forbidden
+        path: "/forbidden",
+        Component: Forbidden,
       },
       {
-        path: '/unauthorized',
-        Component: Unauthorized
+        path: "/unauthorized",
+        Component: Unauthorized,
       },
-      
+
       {
-        path: '/all-scholarships',
-        element: <PrivateRoutes>
-          <AllScholarships/>
-        </PrivateRoutes>
-      },
-      {
-        path: '/scholarship-details/:id',
-        element: <PrivateRoutes>
-          <ScholarshipDetails/>
-        </PrivateRoutes>
+        path: "/all-scholarships",
+        element: (
+          <PrivateRoutes>
+            <AllScholarships />
+          </PrivateRoutes>
+        ),
       },
       {
-        path: '/payment-success',
-        Component: PaymentSuccess
+        path: "/scholarship-details/:id",
+        element: (
+          <PrivateRoutes>
+            <ScholarshipDetails />
+          </PrivateRoutes>
+        ),
       },
       {
-        path: '/payment-cancelled',
-        Component: PaymentFailed
+        path: "/payment-success",
+        Component: PaymentSuccess,
+      },
+      {
+        path: "/payment-cancelled",
+        Component: PaymentFailed,
       },
     ],
   },
   {
-    path: '/dashboard',
-    element: <PrivateRoutes>
-      <MainDashboard/>
-    </PrivateRoutes>,
+    path: "/dashboard",
+    element: (
+      <PrivateRoutes>
+        <MainDashboard />
+      </PrivateRoutes>
+    ),
     children: [
       {
         index: true,
-        Component: DashboardHome
-    },
-      {
-        path: 'my-profile',
-        Component: MyProfile
+        Component: DashboardHome,
       },
       {
-        path: 'my-applications',
-        Component: MyApplications
+        path: "my-profile",
+        Component: MyProfile,
       },
       {
-        path: 'my-reviews',
-        Component: MyReviews
+        path: "my-applications",
+        Component: MyApplications,
       },
       {
-        path: 'add-scholarship',
-        Component: AddScholarship
+        path: "my-reviews",
+        Component: MyReviews,
       },
       {
-        path: 'manage-scholarships',
-        Component: ManageScholarships
+        path: "add-scholarship",
+        element: (
+          <AdminRoute>
+            <AddScholarship />
+          </AdminRoute>
+        ),
       },
       {
-        path: 'manage-users',
-        Component: ManageUsers
+        path: "manage-scholarships",
+        element: (
+          <AdminRoute>
+            <ManageScholarships />
+          </AdminRoute>
+        ),
       },
       {
-        path: 'manage-applications',
-        Component: ManageApplications
+        path: "manage-users",
+        element: (
+          <AdminRoute>
+            <ManageUsers />
+          </AdminRoute>
+        ),
       },
       {
-        path: 'all-reviews',
-        Component: AllReviews
+        path: "manage-applications",
+        element: (
+          <ModeratorRoute>
+            <ManageApplications />
+          </ModeratorRoute>
+        ),
       },
-    ]
-  }
+      {
+        path: "all-reviews",
+        element: (
+          <ModeratorRoute>
+            <AllReviews />
+          </ModeratorRoute>
+        ),
+      },
+    ],
+  },
 ]);
 
 export default router;

@@ -31,17 +31,18 @@ const AdminDashboard = () => {
         </NavLink>
       </li>
       <li>
+        <NavLink to="/dashboard/manage-applications">
+          <PiFiles className="w-5 h-5" />
+          Manage Applications
+        </NavLink>
+      </li>
+      <li>
         <NavLink to="/dashboard/manage-users">
           <PiUsersThree className="w-5 h-5" />
           Manage Users
         </NavLink>
       </li>
-      <li>
-        <NavLink to="/dashboard/analytics">
-          <PiChartBar className="w-5 h-5" />
-          Analytics
-        </NavLink>
-      </li>
+     
     </>
   );
 };
