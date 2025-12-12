@@ -52,7 +52,7 @@ The goal of ScholarStream is to democratize education funding by aggregating sch
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/your-username/scholar-stream-client.git   
+   git clone [https://github.com/your-username/scholar-stream-client.git](https://github.com/armanislams/scholar-stream-client.git)   
    cd scholar-stream-client
    ```
 
