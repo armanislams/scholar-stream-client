@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router';
 import useAuth from './useAuth';
 
 const axiosSecure = axios.create({
-  // baseURL: "http://localhost:3000",
-  baseURL: "https://scholar-stream-backend.vercel.app",
+  baseURL: "http://localhost:3000",
+  // baseURL: "https://scholar-stream-backend.vercel.app",
 });
 
 const useAxiosSecure = () => {
@@ -23,7 +23,7 @@ const useAxiosSecure = () => {
     const resInterceptor = axiosSecure.interceptors.response.use((response) => {
       return response
     }, (error) => {
-      console.log(error);
+      (error);
 
       const statusCode = error.response?.status;;
       // const statusCode = error.status;

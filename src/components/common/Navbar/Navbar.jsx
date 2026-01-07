@@ -8,7 +8,7 @@ const Navbar = () => {
     logOut()
       .then()
       .catch((err) => {
-        console.log(err);
+        (err);
       });
   };
   const links = (

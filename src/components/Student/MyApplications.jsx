@@ -38,7 +38,6 @@ const MyApplications = () => {
       return res.data;
     },
   });
-console.log(applications);
 
   // Delete Application
   const handleDelete = (id) => {
@@ -96,7 +95,21 @@ console.log(applications);
         Swal.fire("Error", "Something went wrong.", "error");
       });
   };
-
+  //payment
+  // const handlePay = async () => {
+  //    const paymentInfo = {
+  //               charge: applicationFees + serviceCharge,
+  //               universityName: universityName,
+  //               studentEmail: user.email,
+  //               scholarshipId: id,
+  //               applicationId: res.data.insertedId,
+  //             };
+  //             const paymentRes = await axiosSecure.post(
+  //               "/scholarship-payment-checkout",
+  //               paymentInfo
+  //             );
+  //             window.location.assign(paymentRes.data.url);
+  // }
   const openDetailsModal = (app) => {
     setSelectedApp(app);
     document.getElementById("details_modal").showModal();

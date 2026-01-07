@@ -57,7 +57,7 @@ const Register = () => {
             navigate(location?.state || "/");
           })
           .catch((err) => {
-            console.log(err);
+            (err);
           });
       });
     });
@@ -79,7 +79,7 @@ const Register = () => {
           Swal.fire(`Reset link has been sent to: ${email}`);
         })
         .catch((err) => {
-          console.log(err);
+          (err);
         });
     }
     };

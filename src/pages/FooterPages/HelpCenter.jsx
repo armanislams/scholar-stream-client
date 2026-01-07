@@ -1,7 +1,9 @@
 import React from 'react';
 import { PiMagnifyingGlass, PiUserGear, PiFiles, PiCreditCard, PiWrench } from 'react-icons/pi';
+import { useNavigate } from 'react-router';
 
 const HelpCenter = () => {
+    const navigate = useNavigate()
     const categories = [
         { icon: <PiUserGear className="w-8 h-8" />, title: "Account & Profile", desc: "Managing your account settings" },
         { icon: <PiFiles className="w-8 h-8" />, title: "Applications", desc: "Submitting and tracking applications" },
@@ -47,7 +49,7 @@ const HelpCenter = () => {
                 <div className="mt-16 text-center">
                     <h3 className="text-xl font-bold mb-4">Still need help?</h3>
                     <p className="text-base-content/70 mb-6">Our support team is available Mon-Fri, 9am-5pm EST.</p>
-                    <button className="btn btn-primary">Contact Support</button>
+                    <button onClick={()=> navigate('/contact-us')} className="btn btn-primary">Contact Support</button>
                 </div>
             </div>
         </div>

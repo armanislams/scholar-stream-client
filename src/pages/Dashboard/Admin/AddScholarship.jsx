@@ -26,7 +26,7 @@ const AddScholarship = () => {
             senderName: user.displayName,
             senderImage: user.photoURL
         };
-        console.log(scholarshipData);
+        (scholarshipData);
 
 
         axiosSecure.post('/scholarships', scholarshipData)

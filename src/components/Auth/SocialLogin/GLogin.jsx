@@ -24,7 +24,7 @@ const GLogin = () => {
          });
        })
        .catch((err) => {
-         console.log(err);
+         (err);
        });
    };
     return (

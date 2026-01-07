@@ -8,15 +8,18 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import Swal from "sweetalert2";
 
 const Login = () => {
-    const [show,setShow]=useState(false)
+  const [show, setShow] = useState(false);
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const { signIn,resetPass } = useAuth();
+  const { signIn, resetPass } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
+
+  const handleShow = () => { setShow(!show) };
+  
   const handleSignIn = (data) => {
     signIn(data.email, data.password)
       .then(() => {
@@ -25,30 +28,47 @@ const Login = () => {
       })
       .catch((error) => {
         toast.error("login failed");
-        console.log(error);
+        error;
       });
-    };
-    const handleShow = () => {
-        setShow(!show)
+  };
+  const handleDemoUserSignIn = (type) => {
+    let email = ''
+    let password = ''
+    if (type === 'user') {
+      email = import.meta.env.VITE_DEMO_USER_EMAIL;
+      password = import.meta.env.VITE_DEMO_USER_PASS;
+    } else if (type === 'admin') {
+      email = import.meta.env.VITE_DEMO_ADMIN_EMAIL;
+      password = import.meta.env.VITE_DEMO_ADMIN_PASS;
     }
+    signIn(email, password)
+      .then(() => {
+        toast.success("login successful");
+        navigate(location?.state || "/");
+      })
+      .catch((error) => {
+        toast.error("login failed");
+        error;
+      });
+  };
 
-    const handleResetPass = async () => {
-        const { value: email } = await Swal.fire({
-          title: "Input email address",
-          input: "email",
-          inputLabel: "Your email address",
-          inputPlaceholder: "Enter your email address",
+  const handleResetPass = async () => {
+    const { value: email } = await Swal.fire({
+      title: "Input email address",
+      input: "email",
+      inputLabel: "Your email address",
+      inputPlaceholder: "Enter your email address",
+    });
+    if (email) {
+      resetPass(email)
+        .then(() => {
+          Swal.fire(`Reset link has been sent to: ${email}`);
+        })
+        .catch((err) => {
+          err;
         });
-        if (email) {
-          resetPass(email)
-            .then(() => {
-              Swal.fire(`Reset link has been sent to: ${email}`);
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-        }
-        };
+    }
+  };
   return (
     <div className="card bg-base-100 w-full mx-auto max-w-sm my-5 shrink-0 py-5 shadow-2xl">
       <h3 className="text-3xl text-center">Welcome Back</h3>
@@ -70,23 +90,25 @@ const Login = () => {
           <div className="relative">
             <label className="label">Password</label>
             <input
-              type={show? 'text': 'password'}
+              type={show ? "text" : "password"}
               {...register("password", {
                 required: "Password is required",
                 pattern: {
-                  value: /(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[^a-zA-Z0-9])(.{6,})/,
+                  value:
+                    /(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[^a-zA-Z0-9])(.{6,})/,
                   message:
                     "Password must be 6+ characters, include a uppercase,a lowercase, a number and a special character.",
                 },
               })}
               className="input"
               placeholder="Password"
-                      />
-                      <div onClick={handleShow} className="absolute top-8 right-7 hover:cursor-pointer">
-                          {
-                              show ? <FaEyeSlash/> :<FaEye/>
-                          }
-                      </div>
+            />
+            <div
+              onClick={handleShow}
+              className="absolute top-8 right-7 hover:cursor-pointer"
+            >
+              {show ? <FaEyeSlash /> : <FaEye />}
+            </div>
 
             {errors.password && (
               <p className="text-red-500">{errors.password.message}</p>
@@ -98,15 +120,17 @@ const Login = () => {
           </div>
 
           <div>
-            <p onClick={handleResetPass} className="link link-hover">Forgot password?</p>
+            <p onClick={handleResetPass} className="link link-hover">
+              Forgot password?
+            </p>
           </div>
-          <button className="btn btn-neutral mt-4">Login</button>
+          <button type="submit" className="btn btn-neutral mt-4">Login</button>
         </fieldset>
         <p>
           New Here?{" "}
           <Link
             state={location?.state}
-            className="link link-hover"
+            className="link link-hover text-primary"
             to={"/register"}
           >
             Register Now!
@@ -114,6 +138,20 @@ const Login = () => {
         </p>
       </form>
       <GLogin />
+      <div className="flex justify-center items-center my-5 gap-5">
+        <button
+          onClick={() => handleDemoUserSignIn("user")}
+          className="btn btn-primary"
+        >
+          Demo User Login
+        </button>
+        <button
+          onClick={() => handleDemoUserSignIn("admin")}
+          className="btn btn-primary"
+        >
+          Demo Admin Login
+        </button>
+      </div>
     </div>
   );
 };

@@ -1,7 +1,12 @@
 import React from 'react';
 import { PiEnvelope, PiPhone, PiMapPin } from 'react-icons/pi';
+import { toast } from 'react-toastify';
 
 const ContactUs = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    toast.error("Sorry Form not working at this moment");
+  }
     return (
       <div className="min-h-screen bg-base-100 py-12 px-6">
         <div className="container mx-auto max-w-6xl">
@@ -57,7 +62,10 @@ const ContactUs = () => {
             <div className="card bg-base-200 shadow-xl">
               <div className="card-body">
                 <h2 className="card-title mb-4">Send us a message</h2>
-                <form className="space-y-4 px-5">
+                <form
+                  onSubmit={handleSubmit}
+                  className="space-y-4 px-5"
+                >
                   <div className="form-control space-x-7">
                     <label className="label">
                       <span className="label-text">Name</span>
@@ -91,7 +99,9 @@ const ContactUs = () => {
                   </div>
 
                   <div className="form-control mt-6">
-                    <button className="btn btn-primary">Send Message</button>
+                    <button type="submit" className="btn btn-primary">
+                      Send Message
+                    </button>
                   </div>
                 </form>
               </div>

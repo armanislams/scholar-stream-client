@@ -55,14 +55,14 @@ const ScholarshipDetails = () => {
   });
 
   const { data: reviews = [] } = useQuery({
-    queryKey: ['reviews', id],
+    queryKey: ['reviews', id, user],
     queryFn: async () => {
       const res = await axiosSecure.get(`/reviews/scholarship/${id}`);
       return res.data;
     }
   });
 
-  console.log(reviews);
+  (reviews);
 
   if (isLoading) {
     return <Loader />;
@@ -344,29 +344,53 @@ const ScholarshipDetails = () => {
             {/* Reviews Section */}
             <div className="card bg-base-200 shadow-xl mt-6">
               <div className="card-body">
-                <h2 className="card-title text-xl mb-6">Student Reviews ({reviews.length})</h2>
+                <h2 className="card-title text-xl mb-6">
+                  Student Reviews ({reviews.length})
+                </h2>
                 {reviews.length > 0 ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {reviews.map((review) => (
-                      <div key={review._id} className="card bg-base-100 p-4 shadow-sm border border-base-300">
+                      <div
+                        key={review._id}
+                        className="card bg-base-100 p-4 shadow-sm border border-base-300"
+                      >
                         <div className="flex items-center gap-3 mb-3">
-                          <img src={review.userImage} alt={review.userName} className="w-10 h-10 rounded-full object-cover" />
+                          <img
+                            src={review.userImage}
+                            alt={review.userName}
+                            className="w-10 h-10 rounded-full object-cover"
+                          />
                           <div>
-                            <h4 className="font-bold text-sm">{review.userName}</h4>
-                            <p className="text-xs opacity-60">{dayjs(review.createdAt).format('DD MMM YYYY')}</p>
+                            <h4 className="font-bold text-sm">
+                              {review.userName}
+                            </h4>
+                            <p className="text-xs opacity-60">
+                              {dayjs(review.createdAt).format("DD MMM YYYY")}
+                            </p>
                           </div>
                         </div>
                         <div className="flex items-center gap-1 mb-2">
                           {[...Array(5)].map((_, i) => (
-                            <PiStarFill key={i} className={`text-sm ${i < review.ratingPoint ? 'text-yellow-500' : 'text-gray-300'}`} />
+                            <PiStarFill
+                              key={i}
+                              className={`text-sm ${
+                                i < review.ratingPoint
+                                  ? "text-yellow-500"
+                                  : "text-gray-300"
+                              }`}
+                            />
                           ))}
                         </div>
-                        <p className="text-sm opacity-80 line-clamp-4">"{review.reviewComment}"</p>
+                        <p className="text-sm opacity-80 line-clamp-4">
+                          "{review.reviewComment}"
+                        </p>
                       </div>
                     ))}
                   </div>
                 ) : (
-                  <p className="opacity-60 italic">No reviews yet for this scholarship.</p>
+                  <p className="opacity-60 italic">
+                    No reviews yet for this scholarship.
+                  </p>
                 )}
               </div>
             </div>
@@ -506,7 +530,16 @@ const ScholarshipDetails = () => {
                 <div className="divider"></div>
 
                 {/* Apply Button */}
-                {hasApplied ? (
+                {!user ? (
+                  <Link
+                    to={"/login"}
+                    state={location.pathname}
+                    className="btn btn-primary btn-block btn-lg"
+                  >
+                    <PiNoteThin />
+                    Login to Apply Now
+                  </Link>
+                ) : hasApplied ? (
                   <button
                     className="btn py-7 flex flex-col text-white btn-block btn-lg"
                     disabled

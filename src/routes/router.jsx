@@ -90,19 +90,11 @@ const router = createBrowserRouter([
 
       {
         path: "/all-scholarships",
-        element: (
-          <PrivateRoutes>
-            <AllScholarships />
-          </PrivateRoutes>
-        ),
+       Component: AllScholarships
       },
       {
         path: "/scholarship-details/:id",
-        element: (
-          <PrivateRoutes>
-            <ScholarshipDetails />
-          </PrivateRoutes>
-        ),
+        Component: ScholarshipDetails
       },
       {
         path: "/payment-success",
