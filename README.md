@@ -1,6 +1,6 @@
 # ScholarStream - Scholarship Management System
 
-[Banner_Image](/scholar%20stream%20client/public/ezgif.com-optimize.gif)
+![Project Banner GIF](/public/ezgif.com-optimize.gif)
 
 ScholarStream is a comprehensive web application designed to connect students with scholarship opportunities worldwide. It simplifies the scholarship search and application process while providing universities with a robust platform to manage their listings.
 
