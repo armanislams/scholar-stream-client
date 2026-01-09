@@ -3,12 +3,12 @@ import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
 import ScholarshipCard from "../Card/ScholarshipCard";
 import Loader from "../../Loader/Loader";
+import ScholarshipCardSkeleton from "../../../Skeletons/CardSkeleton";
 
 const AllScholarships = () => {
   const axiosSecure = useAxiosSecure();
   const [searchText, setSearchText] = useState("");
-  const [selectedScholarshipCategory, setSelectedScholarshipCategory] =
-    useState("");
+  const [selectedScholarshipCategory, setSelectedScholarshipCategory] = useState("");
   const [selectedSubjectCategory, setSelectedSubjectCategory] = useState("");
   const [selectedLocation, setSelectedLocation] = useState("");
   const [sortType, setSortType] = useState("dateDesc");
@@ -155,16 +155,16 @@ const AllScholarships = () => {
     return pages;
   };
 
-  if (isLoading) {
-    return <Loader />;
-  }
+  // if (isLoading) {
+  //   return <Loader />;
+  // }
 
   // Calculate current range
   const startIndex = (currentPage - 1) * pageSize + 1;
   const endIndex = Math.min(currentPage * pageSize, totalCount);
 
   return (
-    <div className="min-h-screen bg-base-300 text-base-content p-6 md:p-10 lg:p-20">
+    <div className="min-h-screen bg-base-300 text-base-content p-5 md:p-10 lg:p-20">
       {/* Header Area */}
       <div className="mb-8 max-w-4xl mx-auto">
         <h1 className="text-4xl lg:text-5xl text-center font-extrabold text-white mb-4">
@@ -323,7 +323,8 @@ const AllScholarships = () => {
                     scholarship{totalCount !== 1 ? "s" : ""}
                     {searchText && ` matching "${searchText}"`}
                     {activeFiltersCount > 0 &&
-                      ` with ${activeFiltersCount} filter${activeFiltersCount !== 1 ? "s" : ""
+                      ` with ${activeFiltersCount} filter${
+                        activeFiltersCount !== 1 ? "s" : ""
                       } applied`}
                   </>
                 ) : (
@@ -344,9 +345,17 @@ const AllScholarships = () => {
       </div>
 
       {/* Scholarships Grid */}
-      {scholarships.length > 0 ? (
+      {isLoading ? (
         <>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 lg:grid-cols-4 lg:gap-8 mb-8">
+            {Array.from({length: 8}).map((_,i) => (
+              <ScholarshipCardSkeleton key={i}/>
+            ))}
+          </div>
+        </>
+      ) : scholarships.length > 0 ? (
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 lg:grid-cols-4 lg:gap-8 mb-8">
             {scholarships.map((scholarship) => (
               <ScholarshipCard
                 key={scholarship._id}
@@ -361,8 +370,9 @@ const AllScholarships = () => {
               <div className="join">
                 {/* Previous Button */}
                 <button
-                  className={`join-item btn btn-sm ${currentPage === 1 ? "hidden" : "block"
-                    }`}
+                  className={`join-item btn btn-sm ${
+                    currentPage === 1 ? "hidden" : "block"
+                  }`}
                   onClick={() => handlePageChange(currentPage - 1)}
                 >
                   «
@@ -380,8 +390,9 @@ const AllScholarships = () => {
                   ) : (
                     <button
                       key={page}
-                      className={`join-item btn btn-sm ${currentPage === page ? "btn-active btn-primary" : ""
-                        }`}
+                      className={`join-item btn btn-sm ${
+                        currentPage === page ? "btn-active btn-primary" : ""
+                      }`}
                       onClick={() => handlePageChange(page)}
                     >
                       {page}
@@ -391,8 +402,9 @@ const AllScholarships = () => {
 
                 {/* Next Button */}
                 <button
-                  className={`join-item btn btn-sm ${currentPage === totalPages ? "hidden" : "block"
-                    }`}
+                  className={`join-item btn btn-sm ${
+                    currentPage === totalPages ? "hidden" : "block"
+                  }`}
                   onClick={() => handlePageChange(currentPage + 1)}
                 >
                   »

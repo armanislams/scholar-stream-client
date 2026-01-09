@@ -1,16 +1,12 @@
 import React from "react";
 import { Link, NavLink } from "react-router";
 import useAuth from "../../../hooks/useAuth";
+import { DropDown } from "../Dropdown/Dropdown";
+import Loader from "../Loader/Loader";
 
 const Navbar = () => {
-  const { user, logOut } = useAuth();
-  const handleLogOut = () => {
-    logOut()
-      .then()
-      .catch((err) => {
-        (err);
-      });
-  };
+  const { user,loading} = useAuth();
+  if(loading) return <Loader/>
   const links = (
     <>
       <li><NavLink to={'/'} className="hover:text-purple-600 transition-colors">Home</NavLink></li>
@@ -61,14 +57,13 @@ const Navbar = () => {
       </div>
       <div className="navbar-end">
         {user ? (
-          <button onClick={handleLogOut} className="btn btn-primary">
-            Log Out
-          </button>
+           <DropDown/>
         ) : (
           <Link to={"/login"} className="btn btn-primary">
             Login
           </Link>
         )}
+       
       </div>
     </div>
   );

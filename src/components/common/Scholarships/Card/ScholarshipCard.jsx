@@ -21,8 +21,6 @@ const ScholarshipCard = ({ scholarship }) => {
   };
 
   return (
-    // DaisyUI 'card' component with dark background and hover effect
-    // bg-base-200 provides the dark card background seen in your screenshot
     <div className="card bg-base-200 shadow-xl border border-gray-700 hover:shadow-2xl hover:border-primary transition-all duration-300">
       <div className="card-body p-5">
         {/* University Header (Image and Name) */}

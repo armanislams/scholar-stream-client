@@ -3,10 +3,16 @@ import useAuth from '../../../hooks/useAuth';
 import useRole from '../../../hooks/useRole';
 import { PiUserCircle } from 'react-icons/pi';
 import dayjs from 'dayjs';
+import Loader from '../../../components/common/Loader/Loader';
+import useUserId from '../../../hooks/useUserId';
 
 const MyProfile = () => {
     const { user } = useAuth();
-    const { role } = useRole();
+    const { role, roleLoading } = useRole();
+    const { uid,uidLoading } = useUserId()    
+    
+    if(roleLoading,uidLoading)return <Loader/>
+    
 
     return (
         <div className="flex justify-center items-start pt-10 min-h-[60vh]">
@@ -24,7 +30,8 @@ const MyProfile = () => {
                 </figure>
                 <div className="card-body items-center text-center">
                     <h2 className="card-title text-3xl font-bold mb-1">{user?.displayName}</h2>
-                    <p className="text-base-content/70 font-medium mb-4">{user?.email}</p>
+                    <p className="text-base-content/70 font-medium mb-4">Email: {user?.email}</p>
+                    <p className="text-base-content/70 font-medium mb-4">User ID: {uid}</p>
 
                     <div className="badge badge-primary badge-lg uppercase font-semibold tracking-wider mb-6 pb-4 pt-4 px-6 rounded-full">
                         {role || 'Student'}

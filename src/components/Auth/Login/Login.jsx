@@ -6,6 +6,7 @@ import useAuth from "../../../hooks/useAuth";
 import GLogin from "../SocialLogin/GLogin";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import Swal from "sweetalert2";
+import Loader from "../../common/Loader/Loader";
 
 const Login = () => {
   const [show, setShow] = useState(false);
@@ -14,9 +15,10 @@ const Login = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const { signIn, resetPass } = useAuth();
+  const { signIn, resetPass, loading } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
+  if(loading)return <Loader/>
 
   const handleShow = () => { setShow(!show) };
   
@@ -40,7 +42,11 @@ const Login = () => {
     } else if (type === 'admin') {
       email = import.meta.env.VITE_DEMO_ADMIN_EMAIL;
       password = import.meta.env.VITE_DEMO_ADMIN_PASS;
+    }else if (type === 'mod') {
+      email = import.meta.env.VITE_DEMO_MOD_EMAIL;
+      password = import.meta.env.VITE_DEMO_MOD_PASS;
     }
+
     signIn(email, password)
       .then(() => {
         toast.success("login successful");
@@ -70,7 +76,7 @@ const Login = () => {
     }
   };
   return (
-    <div className="card bg-base-100 w-full mx-auto max-w-sm my-5 shrink-0 py-5 shadow-2xl">
+    <div className="card bg-base-100 w-full mx-auto max-w-sm my-5 shrink-0 px-3 py-5 shadow-2xl">
       <h3 className="text-3xl text-center">Welcome Back</h3>
       <form onSubmit={handleSubmit(handleSignIn)} className="card-body">
         <fieldset className="fieldset">
@@ -105,7 +111,7 @@ const Login = () => {
             />
             <div
               onClick={handleShow}
-              className="absolute top-8 right-7 hover:cursor-pointer"
+              className="absolute top-8 right-3 hover:cursor-pointer"
             >
               {show ? <FaEyeSlash /> : <FaEye />}
             </div>
@@ -137,13 +143,22 @@ const Login = () => {
           </Link>
         </p>
       </form>
+      {/* social logins */}
       <GLogin />
-      <div className="flex justify-center items-center my-5 gap-5">
+
+      {/* demo logins */}
+      <div className="flex flex-col flex-wrap md:flex-row justify-center items-center my-5 gap-5">
         <button
           onClick={() => handleDemoUserSignIn("user")}
           className="btn btn-primary"
         >
           Demo User Login
+        </button>
+        <button
+          onClick={() => handleDemoUserSignIn("mod")}
+          className="btn btn-primary"
+        >
+          Demo Mod Login
         </button>
         <button
           onClick={() => handleDemoUserSignIn("admin")}

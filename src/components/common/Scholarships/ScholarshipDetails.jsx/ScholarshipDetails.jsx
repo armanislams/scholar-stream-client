@@ -8,13 +8,13 @@ import useAuth from "../../../../hooks/useAuth";
 import { PiNoteThin } from "react-icons/pi";
 import Swal from "sweetalert2";
 import { PiStarFill } from 'react-icons/pi';
+import useUserId from "../../../../hooks/useUserId";
 
 const ScholarshipDetails = () => {
   const { id } = useParams();
   const axiosSecure = useAxiosSecure();
   const { user } = useAuth()
-  // const navigate = useNavigate()
-
+const {uid} = useUserId()
 
   const { data: scholarship = [], isLoading } = useQuery({
     queryKey: ["scholarship-details"],
@@ -62,7 +62,6 @@ const ScholarshipDetails = () => {
     }
   });
 
-  (reviews);
 
   if (isLoading) {
     return <Loader />;
@@ -71,9 +70,10 @@ const ScholarshipDetails = () => {
 
   const handlePayment = async () => {
     const applicationData = {
-      scholarshipId: id,
       userName: user.displayName,
       userEmail: user.email,
+      userId: uid,
+      scholarshipId: id,
       universityName: universityName,
       universityCountry: universityCountry,
       scholarshipCategory: scholarshipCategory,
@@ -235,7 +235,7 @@ const ScholarshipDetails = () => {
                   </div>
                   <div className="stat bg-base-300 rounded-lg p-4">
                     <div className="stat-title text-xs">Degree</div>
-                    <div className="stat-value text-lg">{degree || "N/A"}</div>
+                    <div className="stat-value text-sm md:text-lg">{degree || "N/A"}</div>
                   </div>
                 </div>
               </div>

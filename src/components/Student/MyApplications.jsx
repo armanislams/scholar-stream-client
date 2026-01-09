@@ -38,8 +38,41 @@ const MyApplications = () => {
       return res.data;
     },
   });
+  console.log(applications);
 
   // Delete Application
+
+  const handlePayment = async (id) => {
+    const res = await axiosSecure.get(`/applied-scholarship/${id}`);
+    const { universityName, applicationFees, scholarshipId } = res.data;
+     Swal.fire({
+       title: `Apply to ${universityName}`,
+       text: `Are You sure want to apply here! Total Cost $${
+         applicationFees
+       }`,
+       icon: "warning",
+       showCancelButton: true,
+       confirmButtonColor: "#3085d6",
+       cancelButtonColor: "#d33",
+       confirmButtonText: "Confirm",
+     }).then(async (result) => {
+       if (result.isConfirmed) {
+         const paymentInfo = {
+           charge: applicationFees,
+           universityName: universityName,
+           studentEmail: user.email,
+           scholarshipId: scholarshipId,
+           applicationId: id,
+         };
+         const paymentRes = await axiosSecure.post(
+           "/scholarship-payment-checkout",
+           paymentInfo
+         );
+         window.location.assign(paymentRes.data.url);
+       }
+     });
+  };
+
   const handleDelete = (id) => {
     Swal.fire({
       title: "Are you sure?",
@@ -96,20 +129,36 @@ const MyApplications = () => {
       });
   };
   //payment
-  // const handlePay = async () => {
-  //    const paymentInfo = {
-  //               charge: applicationFees + serviceCharge,
-  //               universityName: universityName,
-  //               studentEmail: user.email,
-  //               scholarshipId: id,
-  //               applicationId: res.data.insertedId,
-  //             };
-  //             const paymentRes = await axiosSecure.post(
-  //               "/scholarship-payment-checkout",
-  //               paymentInfo
-  //             );
-  //             window.location.assign(paymentRes.data.url);
-  // }
+  // const handlePayment = async () => {
+  //
+  //    Swal.fire({
+  //      title: `Apply to ${universityName}`,
+  //      text: `Are You sure want to apply here! Total Cost $${applicationFees + serviceCharge
+  //        }`,
+  //      icon: "warning",
+  //      showCancelButton: true,
+  //      confirmButtonColor: "#3085d6",
+  //      cancelButtonColor: "#d33",
+  //      confirmButtonText: "Confirm",
+  //    }).then((result) => {
+  //      if (result.isConfirmed) {
+  //              const paymentInfo = {
+  //                charge: applicationFees + serviceCharge,
+  //                universityName: universityName,
+  //                studentEmail: user.email,
+  //                scholarshipId: id,
+  //                applicationId: res.data.insertedId,
+  //              };
+  //              const paymentRes = await axiosSecure.post(
+  //                "/scholarship-payment-checkout",
+  //                paymentInfo
+  //              );
+  //              window.location.assign(paymentRes.data.url);
+  //            }
+  //          });
+  //      }
+  //    });
+  //  }
   const openDetailsModal = (app) => {
     setSelectedApp(app);
     document.getElementById("details_modal").showModal();
@@ -151,7 +200,9 @@ const MyApplications = () => {
               {applications.map((app) => (
                 <tr key={app._id} className="text-center">
                   <td>
-                    <div className="font-bold text-left items-center">{app.universityName}</div>
+                    <div className="font-bold text-left items-center">
+                      {app.universityName}
+                    </div>
                     <div className="text-sm opacity-50">
                       {app.universityCountry}
                     </div>
@@ -225,6 +276,7 @@ const MyApplications = () => {
                         {/* Only allow pay if unpaid logic? Assuming applicationFees > 0 implies payment needed usually, but logic says pending + unpaid */}
                         {app.paymentStatus === "unpaid" && (
                           <button
+                            onClick={() => handlePayment(app._id)}
                             className="btn btn-ghost btn-xs tooltip"
                             data-tip="Pay"
                           >

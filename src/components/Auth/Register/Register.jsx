@@ -8,19 +8,21 @@ import GLogin from "../SocialLogin/GLogin";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
+import Loader from "../../common/Loader/Loader";
 
 const Register = () => {
   const [show, setShow] = useState(false);
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors,isSubmitting,isLoading, },
   } = useForm();
   const location = useLocation();
   const navigate = useNavigate();
   const axiosSecure = useAxiosSecure();
 
-  const { register: registerUser, updateUser, resetPass } = useAuth();
+  const { register: registerUser, updateUser, resetPass, loading } = useAuth();
+  if(loading || isSubmitting|| isLoading)return <Loader/>
   const handleRegister = (data) => {
     const profileImage = data.photo[0];
     registerUser(data.email, data.password).then(() => {
@@ -163,7 +165,7 @@ const Register = () => {
           Have an account?{" "}
           <Link
             state={location.state}
-            className="link link-hover"
+            className="link link-hover text-primary"
             to={"/login"}
           >
             Login Now!

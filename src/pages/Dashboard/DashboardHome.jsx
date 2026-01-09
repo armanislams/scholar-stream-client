@@ -178,11 +178,11 @@ const DashboardHome = () => {
                 <div className="card bg-base-100 shadow-xl mt-8">
                     <div className="card-body">
                         <h2 className="card-title text-2xl mb-6">Applications by Subject Category</h2>
-                        <div className="flex flex-wrap items-end justify-center gap-8 h-64 p-4 border-b border-base-200">
+                        <div className="flex md:flex-wrap items-end justify-center md:gap-8 h-64 md:p-4 border-b border-base-200">
                             {chartData.map((d, index) => (
                                 <div key={index} className='flex flex-col items-center gap-2 group w-16'>
                                     <div
-                                        className='w-12 bg-primary rounded-t-lg transition-all duration-500 hover:bg-secondary relative flex items-end justify-center'
+                                        className='md:w-12 w-7 bg-primary rounded-t-lg transition-all duration-500 hover:bg-secondary relative flex items-end justify-center'
                                         style={{ height: `${(d.value / Math.max(...chartData.map(i => i.value))) * 180}px`, minHeight: '20px' }}
                                     >
                                         <span className="text-white text-xs font-bold mb-1 opacity-0 group-hover:opacity-100 transition-opacity">{d.value}</span>
