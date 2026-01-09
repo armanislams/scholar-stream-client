@@ -63,7 +63,7 @@ const MainDashboard = () => {
             </label>
           </div>
           <div className="flex-1 px-2 mx-2 font-bold text-xl gradient-text">
-            ScholarStream
+            <Link to={"/"}>ScholarStream</Link>
           </div>
         </div>
 
@@ -118,8 +118,8 @@ const MainDashboard = () => {
             </button>
           </li>
         </ul>
-          </div>
-          <ToastContainer/>
+      </div>
+      <ToastContainer />
     </div>
   );
 };
