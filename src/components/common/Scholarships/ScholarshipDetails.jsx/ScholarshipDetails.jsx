@@ -9,6 +9,7 @@ import { PiNoteThin } from "react-icons/pi";
 import Swal from "sweetalert2";
 import { PiStarFill } from 'react-icons/pi';
 import useUserId from "../../../../hooks/useUserId";
+import { CiBookmark } from "react-icons/ci";
 
 const ScholarshipDetails = () => {
   const { id } = useParams();
@@ -51,6 +52,15 @@ const {uid} = useUserId()
     queryFn: async () => {
       const appliedRes = await axiosSecure.get(`/applied-scholarships/${user?.email}`);
       return appliedRes.data.some(application => application.scholarshipId === id);
+    }
+  });
+
+  const { data: bookmarkData, refetch: refetchBookmark } = useQuery({
+    queryKey: ['user-bookmarked', id, user?.email],
+    enabled: !!user?.email && !!id,
+    queryFn: async () => {
+      const bookmarkedRes = await axiosSecure.get(`/bookmarks/${user?.email}`);
+      return bookmarkedRes.data.find(bookmark => bookmark.scholarshipId === id);
     }
   });
 
@@ -117,6 +127,60 @@ const {uid} = useUserId()
   }
 
 
+  const handleBookmark = async () => {
+    if (!user) {
+      Swal.fire({
+        title: "Please Login",
+        text: "You need to be logged in to save scholarships",
+        icon: "warning",
+      });
+      return;
+    }
+
+    if (bookmarkData) {
+      try {
+        await axiosSecure.delete(`/bookmarks/${bookmarkData._id}`);
+        refetchBookmark();
+        Swal.fire({
+          title: "Removed",
+          text: "Scholarship removed from your saved list",
+          icon: "success",
+          timer: 1500,
+          showConfirmButton: false
+        });
+      } catch (err) {
+        console.error(err);
+      }
+    } else {
+      const newBookmark = {
+        scholarshipId: id,
+        userEmail: user.email,
+        scholarshipName,
+        universityName,
+        universityCountry,
+        scholarshipCategory,
+        subjectCategory,
+        applicationFees,
+        applicationDeadline
+      };
+      
+      try {
+        await axiosSecure.post("/bookmarks", newBookmark);
+        refetchBookmark();
+        Swal.fire({
+          title: "Saved!",
+          text: "Scholarship saved to your list",
+          icon: "success",
+          timer: 1500,
+          showConfirmButton: false
+        });
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  };
+
+
   const formatFees = (fee) => {
     if (fee === undefined || fee === null) return "N/A";
     return fee === 0 ? "Free" : `$${fee.toLocaleString()}`;
@@ -177,9 +241,18 @@ const {uid} = useUserId()
 
                   {/* Title and University Info */}
                   <div className="flex-1">
-                    <h1 className="text-2xl md:text-3xl font-bold mb-2">
-                      {scholarshipName}
-                    </h1>
+                    <div className="flex justify-between items-start gap-4 mb-2">
+                      <h1 className="text-2xl md:text-3xl font-bold">
+                        {scholarshipName}
+                      </h1>
+                      <button 
+                        onClick={handleBookmark}
+                        className={`btn btn-circle ${bookmarkData ? 'btn-primary text-white' : 'btn-ghost'}`}
+                        title={bookmarkData ? "Remove Bookmark" : "Bookmark Scholarship"}
+                      >
+                        <CiBookmark className="text-2xl" />
+                      </button>
+                    </div>
                     <div className="flex flex-wrap gap-2 items-center text-base-content/70">
                       <div className="badge badge-primary badge-lg">
                         {universityName}

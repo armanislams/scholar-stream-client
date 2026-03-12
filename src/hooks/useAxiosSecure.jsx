@@ -1,8 +1,8 @@
 import axios from 'axios';
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router';
+import { toast } from 'react-toastify';
 import useAuth from './useAuth';
-
 const axiosSecure = axios.create({
   // baseURL: "http://localhost:3000",
   baseURL: "https://scholar-stream-backend.vercel.app",
@@ -21,9 +21,14 @@ const useAxiosSecure = () => {
 
     ///interceptor response
     const resInterceptor = axiosSecure.interceptors.response.use((response) => {
+     
       return response
     }, (error) => {
-      (error);
+      // If there is no response, it likely means the request never reached the server (network error / server down)
+      if (!error.response) {
+        toast.error('Internal Server Error');
+        return Promise.reject(error);
+      }
 
       const statusCode = error.response?.status;;
       // const statusCode = error.status;

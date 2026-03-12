@@ -7,7 +7,7 @@ import AllScholarships from "../components/common/Scholarships/AllScholarships/A
 import ScholarshipDetails from "../components/common/Scholarships/ScholarshipDetails.jsx/ScholarshipDetails";
 import LearnMore from "../components/LandingPage/LearnMore";
 import PaymentSuccess from "../pages/Payments/PaymentSuccess";
-import PrivateRoutes from "../contexts/ProtecedRoutes/PrivateRoutes";
+import PrivateRoutes from "../contexts/ProtectedRoutes/PrivateRoutes";
 import HowItWorks from "../pages/FooterPages/HowItWorks";
 import Blog from "../pages/FooterPages/Blog";
 import HelpCenter from "../pages/FooterPages/HelpCenter";
@@ -29,8 +29,9 @@ import ManageScholarships from "../pages/Dashboard/Admin/ManageScholarships";
 import ManageUsers from "../pages/Dashboard/Admin/ManageUsers";
 import ManageApplications from "../pages/Dashboard/Moderator/ManageApplications";
 import AllReviews from "../pages/Dashboard/Moderator/AllReviews";
-import AdminRoute from "../contexts/ProtecedRoutes/AdminRoute";
-import ModeratorRoute from "../contexts/ProtecedRoutes/ModeratorRoute";
+import MySavedScholarships from "../components/Student/MySavedScholarships";
+import AdminRoute from "../contexts/ProtectedRoutes/AdminRoute";
+import ModeratorRoute from "../contexts/ProtectedRoutes/ModeratorRoute";
 
 const router = createBrowserRouter([
   {
@@ -129,6 +130,10 @@ const router = createBrowserRouter([
       {
         path: "my-reviews",
         Component: MyReviews,
+      },
+      {
+        path: "my-saved-scholarships",
+        Component: MySavedScholarships,
       },
       {
         path: "add-scholarship",

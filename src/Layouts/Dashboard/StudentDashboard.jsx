@@ -24,6 +24,13 @@ const StudentDashboard = () => {
                     My Reviews
                 </NavLink>
             </li>
+            <div className="divider my-2"></div>
+            <li>
+                <NavLink to="/dashboard/my-saved-scholarships">
+                    <PiStar className="w-5 h-5" />
+                    My Saved Scholarships
+                </NavLink>
+            </li>
         </>
     );
 };

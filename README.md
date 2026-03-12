@@ -6,7 +6,7 @@ ScholarStream is a comprehensive web application designed to connect students wi
 
 ## 🔗 Live URL
 
-**[Click Here] (https://scholar-stream-791d1.web.app/)**
+**[Click Here](https://scholar-stream-791d1.web.app/)**
 
 ## 🌟 Purpose
 
