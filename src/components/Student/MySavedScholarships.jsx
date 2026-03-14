@@ -6,6 +6,7 @@ import { Link } from "react-router";
 import Swal from "sweetalert2";
 import { PiEye, PiTrash, PiNoteThin } from "react-icons/pi";
 import dayjs from "dayjs";
+import Loader from "../common/Loader/Loader";
 
 const MySavedScholarships = () => {
   const { user } = useAuth();
@@ -56,11 +57,7 @@ const MySavedScholarships = () => {
   };
 
   if (isLoading)
-    return (
-      <div className="flex justify-center p-10">
-        <span className="loading loading-spinner loading-lg"></span>
-      </div>
-    );
+    return <Loader/>
 
   return (
     <div className="card bg-base-100 shadow-xl">

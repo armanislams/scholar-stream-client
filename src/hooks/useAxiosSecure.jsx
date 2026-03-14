@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
 import useAuth from './useAuth';
 const axiosSecure = axios.create({
-  // baseURL: "http://localhost:3000",
-  baseURL: "https://scholar-stream-backend.vercel.app",
+  // baseURL: import.meta.env.VITE_local_url
+  baseURL: import.meta.env.VITE_live_url
 });
 
 const useAxiosSecure = () => {
