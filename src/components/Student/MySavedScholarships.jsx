@@ -37,7 +37,9 @@ const MySavedScholarships = () => {
       confirmButtonText: "Yes, remove it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        axiosSecure.delete(`/bookmarks/${id}`).then((res) => {
+        axiosSecure
+          .delete(`/bookmarks/${id}`, { data: { email: user.email } })
+          .then((res) => {
           if (res.data.deletedCount > 0) {
             Swal.fire(
               "Removed!",
@@ -46,7 +48,7 @@ const MySavedScholarships = () => {
             );
             refetch();
           }
-        });
+          });
       }
     });
   };

@@ -33,6 +33,36 @@ const ManageApplications = () => {
       });
   };
 
+  const handleDeleteApplication = async (id) => {
+    const result = await Swal.fire({
+      title: "Delete application?",
+      text: "This cannot be undone.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, delete",
+      cancelButtonText: "Cancel",
+      confirmButtonColor: "#d33",
+    });
+
+    if (!result.isConfirmed) return;
+
+    try {
+      const res = await axiosSecure.delete(`/applications/${id}`);
+      if (res.data.deletedCount > 0) {
+        Swal.fire("Deleted!", "Application has been deleted.", "success");
+        refetch();
+        return;
+      }
+      Swal.fire("Not deleted", "No application was deleted.", "info");
+    } catch (error) {
+      Swal.fire(
+        "Error",
+        error?.response?.data?.message || "Failed to delete application.",
+        "error",
+      );
+    }
+  };
+
   const handleFeedbackSubmit = (data) => {
     if (!selectedApp) return;
 
@@ -163,9 +193,9 @@ const ManageApplications = () => {
                       <PiChatText className="text-lg text-secondary" />
                     </button>
                     <button
-                      onClick={() => handleStatusUpdate(app._id, "rejected")}
+                      onClick={() => handleDeleteApplication(app._id)}
                       className="btn btn-ghost btn-xs tooltip"
-                      data-tip="Reject/Cancel"
+                      data-tip="Delete application"
                     >
                       <PiXCircle className="text-lg text-error" />
                     </button>
