@@ -60,7 +60,7 @@ const {uid} = useUserId()
     });
   }, [id, scholarshipName, universityName, universityCountry, scholarshipCategory, degree, trackEvent]);
 
-  const { data: hasApplied, refetch } = useQuery({
+  const { data: hasApplied,isLoading: isLoadingApplied, refetch } = useQuery({
     queryKey: ['user-applied', id, user?.email],
     enabled: !!user?.email && !!id,
     queryFn: async () => {
@@ -69,7 +69,7 @@ const {uid} = useUserId()
     }
   });
 
-  const { data: bookmarkData, refetch: refetchBookmark } = useQuery({
+  const { data: bookmarkData,isLoading: isLoadingBookmark, refetch: refetchBookmark } = useQuery({
     queryKey: ['user-bookmarked', id, user?.email],
     enabled: !!user?.email && !!id,
     queryFn: async () => {
@@ -78,7 +78,7 @@ const {uid} = useUserId()
     }
   });
 
-  const { data: reviews = [] } = useQuery({
+  const { data: reviews = [],isLoading: isLoadingReviews } = useQuery({
     queryKey: ['reviews', id, user],
     queryFn: async () => {
       const res = await axiosSecure.get(`/reviews/scholarship/${id}`);
@@ -87,7 +87,7 @@ const {uid} = useUserId()
   });
 
 
-  if (isLoading) {
+  if (isLoading || isLoadingApplied || isLoadingBookmark || isLoadingReviews) {
     return <Loader />;
   }
 
@@ -166,19 +166,13 @@ const {uid} = useUserId()
     }
 
     if (bookmarkData) {
-      try {
-        await axiosSecure.delete(`/bookmarks/${bookmarkData._id}`);
-        refetchBookmark();
-        Swal.fire({
-          title: "Removed",
-          text: "Scholarship removed from your saved list",
-          icon: "success",
+      Swal.fire({
+          title: "Already Bookmarked",
+          text: "This scholarship is already in your saved list",
+          icon: "warning",
           timer: 1500,
           showConfirmButton: false
-        });
-      } catch (err) {
-        console.error(err);
-      }
+        }); 
     } else {
       const newBookmark = {
         scholarshipId: id,

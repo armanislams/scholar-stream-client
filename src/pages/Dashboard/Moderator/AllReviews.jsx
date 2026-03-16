@@ -3,8 +3,10 @@ import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 import { PiTrash, PiStarFill } from "react-icons/pi";
+import useAuth from "../../../hooks/useAuth";
 
 const AllReviews = () => {
+  const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
 
   const {
@@ -30,7 +32,7 @@ const AllReviews = () => {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        axiosSecure.delete(`/reviews/${id}`).then((res) => {
+        axiosSecure.delete(`/reviews/${id}`,{data: {email: user.email}}).then((res) => {
           if (res.data.deletedCount > 0) {
             Swal.fire("Deleted!", "Review has been removed.", "success");
             refetch();

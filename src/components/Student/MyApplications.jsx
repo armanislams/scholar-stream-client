@@ -84,7 +84,7 @@ const MyApplications = () => {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        axiosSecure.delete(`/applications/${id}`).then((res) => {
+        axiosSecure.delete(`/applications/${id}`,{data: {email: user.email}}).then((res) => {
           if (res.data.deletedCount > 0) {
             Swal.fire(
               "Deleted!",
@@ -373,6 +373,7 @@ const MyApplications = () => {
               <input
                 type="number"
                 placeholder="5"
+                defaultValue={selectedApp?.rating || 5}
                 {...register("rating", { required: true, min: 1, max: 5 })}
                 className="input input-bordered w-full"
               />

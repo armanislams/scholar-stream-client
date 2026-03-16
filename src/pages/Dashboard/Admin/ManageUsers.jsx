@@ -34,10 +34,10 @@ const ManageUsers = () => {
       confirmButtonText: "Yes, delete user!",
     }).then((result) => {
       if (result.isConfirmed) {
+        refetch();
         axiosSecure.delete(`/users/${id}`).then((res) => {
           if (res.data.deletedCount > 0) {
             Swal.fire("Deleted!", "User has been deleted.", "success");
-            refetch();
           }
         });
       }
