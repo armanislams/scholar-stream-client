@@ -12,6 +12,7 @@
   "dependencies": {
     "@headlessui/react": "^2.2.9",
     "@heroicons/react": "^2.2.0",
+    "@posthog/react": "^1.8.2",
     "@tailwindcss/vite": "^4.1.17",
     "@tanstack/react-query": "^5.90.12",
     "axios": "^1.13.6",
@@ -19,6 +20,7 @@
     "firebase": "^12.10.0",
     "icons": "^1.0.0",
     "motion": "^12.23.25",
+    "posthog-js": "^1.360.2",
     "react": "^19.2.1",
     "react-dom": "^19.2.0",
     "react-hook-form": "^7.68.0",

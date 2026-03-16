@@ -6,6 +6,7 @@ import { PiCheckCircleFill } from 'react-icons/pi';
 import useAuth from '../../hooks/useAuth';
 import { toast } from 'react-toastify';
 import dayjs from 'dayjs';
+import useAnalytics from '../../hooks/useAnalytics';
 
 const PaymentSuccess = () => {
   const [searchParams] = useSearchParams();
@@ -13,6 +14,7 @@ const PaymentSuccess = () => {
   const axiosSecure = useAxiosSecure();
     const { loading } = useAuth()
     const [paymentData, setPaymentData] = useState(null);
+    const { trackEvent } = useAnalytics();
 
   useEffect(() => {
     if (sessionId) {
@@ -21,6 +23,11 @@ const PaymentSuccess = () => {
             if (res.data.resultPayment.insertedId) {
                 toast.success("Payment Successful");
                 setPaymentData(res.data.payment);
+                trackEvent("payment_success", {
+                  amount: res.data.payment?.amount,
+                  universityName: res.data.payment?.universityName,
+                  transactionId: res.data.payment?.transactionId,
+                });
             }
         })
         .catch(err => {
@@ -28,7 +35,7 @@ const PaymentSuccess = () => {
         });
     }
 
-  }, [sessionId, axiosSecure]);
+  }, [sessionId, axiosSecure, trackEvent]);
    
 
   if (loading) {

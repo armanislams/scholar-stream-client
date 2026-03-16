@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, useParams } from "react-router";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import Loader from "../../Loader/Loader";
@@ -10,12 +10,14 @@ import Swal from "sweetalert2";
 import { PiStarFill } from 'react-icons/pi';
 import useUserId from "../../../../hooks/useUserId";
 import { CiBookmark } from "react-icons/ci";
+import useAnalytics from "../../../../hooks/useAnalytics";
 
 const ScholarshipDetails = () => {
   const { id } = useParams();
   const axiosSecure = useAxiosSecure();
   const { user } = useAuth()
 const {uid} = useUserId()
+  const { trackEvent } = useAnalytics();
 
   const { data: scholarship = [], isLoading } = useQuery({
     queryKey: ["scholarship-details"],
@@ -45,6 +47,18 @@ const {uid} = useUserId()
     stipend,
     postGraduationWorkPermit,
   } = scholarship;
+
+  useEffect(() => {
+    if (!scholarshipName || !id) return;
+    trackEvent("scholarship_view", {
+      scholarshipId: id,
+      scholarshipName,
+      universityName,
+      universityCountry,
+      scholarshipCategory,
+      degree,
+    });
+  }, [id, scholarshipName, universityName, universityCountry, scholarshipCategory, degree, trackEvent]);
 
   const { data: hasApplied, refetch } = useQuery({
     queryKey: ['user-applied', id, user?.email],
@@ -103,11 +117,25 @@ const {uid} = useUserId()
       confirmButtonText: "Confirm",
     }).then((result) => {
       if (result.isConfirmed) {
+        trackEvent("application_started", {
+          scholarshipId: id,
+          universityName,
+          scholarshipCategory,
+          degree,
+          totalCost: applicationFees + serviceCharge,
+        });
         axiosSecure
           .post("/apply-scholarships", applicationData)
           .then(async (res) => {
             if (res.data.insertedId) {
               refetch();
+              trackEvent("application_submitted", {
+                scholarshipId: id,
+                universityName,
+                scholarshipCategory,
+                degree,
+                totalCost: applicationFees + serviceCharge,
+              });
               const paymentInfo = {
                 charge: applicationFees + serviceCharge,
                 universityName: universityName,

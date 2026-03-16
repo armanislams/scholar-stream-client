@@ -4,9 +4,11 @@ import { useQuery } from "@tanstack/react-query";
 import ScholarshipCard from "../Card/ScholarshipCard";
 import Loader from "../../Loader/Loader";
 import ScholarshipCardSkeleton from "../../../Skeletons/CardSkeleton";
+import useAnalytics from "../../../../hooks/useAnalytics";
 
 const AllScholarships = () => {
   const axiosSecure = useAxiosSecure();
+  const { trackEvent } = useAnalytics();
   const [searchText, setSearchText] = useState("");
   const [selectedScholarshipCategory, setSelectedScholarshipCategory] = useState("");
   const [selectedSubjectCategory, setSelectedSubjectCategory] = useState("");
@@ -15,8 +17,13 @@ const AllScholarships = () => {
   const [currentPage, setCurrentPage] = useState(1);
 
   const handleSearchChange = (e) => {
-    setSearchText(e.target.value);
+    const value = e.target.value;
+    setSearchText(value);
     setCurrentPage(1);
+    trackEvent("scholarship_search", {
+      query: value,
+      hasQuery: !!value.trim(),
+    });
   };
 
   const handleScholarshipCategoryChange = (e) => {
