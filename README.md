@@ -20,7 +20,9 @@ The goal of ScholarStream is to democratize education funding by aggregating sch
 ### 🎓 For Students
 
 - **Smart Search**: Filter scholarships by university, degree, or country.
+- **Enhanced Profile**: Update detailed profile information (bio, degree, GPA, avatar) for more personalized applications.
 - **Dashboard**: Track application statuses and reviews.
+- **Bookmarks / Saved Scholarships**: Save scholarships to revisit and apply later from the dashboard.
 - **Payment Integration**: Secure payment gateway for application fees.
 - **Responsive Design**: Mobile-friendly interface for on-the-go access.
 
@@ -30,6 +32,7 @@ The goal of ScholarStream is to democratize education funding by aggregating sch
 - **Scholarship Management**: Add, edit, or delete scholarship listings.
 - **Review System**: Moderate feedback and reviews from users.
 - **User Management**: Manage user roles and permissions.
+- **Applications CSV Export**: Admin & Super Admin can export all applied scholarship applications to CSV for offline reporting and analysis.
 
 ## 🛠️ Technology Stack
 
@@ -94,6 +97,12 @@ The goal of ScholarStream is to democratize education funding by aggregating sch
    ```bash
    npm run build
    ```
+
+## 🆕 Recent Frontend Updates
+
+- **Profile Update with More Details**: Users can now enrich their profiles with bio, degree, GPA, and profile photo, which are displayed across dashboards and used in applications.
+- **Bookmarks / Saved Scholarships**: Added the ability for students to bookmark scholarships and manage them from a dedicated section in their dashboard.
+- **Admin CSV Export for Applications**: Admin and Super Admin dashboards now include an "Export CSV" action that downloads all applications with key fields (user, university, status, fees, dates).
 
 ## 📄 License
 
