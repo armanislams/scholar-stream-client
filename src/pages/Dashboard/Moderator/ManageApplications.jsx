@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
-import { PiEye, PiChatText, PiXCircle, PiCheckCircle } from "react-icons/pi";
+import { PiEye, PiChatText, PiXCircle, PiCheckCircle, PiDownloadSimple } from "react-icons/pi";
 import { useForm } from "react-hook-form";
 
 const ManageApplications = () => {
@@ -48,6 +48,31 @@ const ManageApplications = () => {
       });
   };
 
+  const handleExportCsv = async () => {
+    try {
+      const response = await axiosSecure.get("/applications/export", {
+        responseType: "blob",
+      });
+
+      const blob = new Blob([response.data], { type: "text/csv;charset=utf-8;" });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      const date = new Date().toISOString().slice(0, 10);
+      link.setAttribute("download", `applications-export-${date}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      Swal.fire(
+        "Error",
+        error?.response?.data?.message || "Failed to export applications.",
+        "error",
+      );
+    }
+  };
+
   const openDetails = (app) => {
     setSelectedApp(app);
     document.getElementById("app_details_modal").showModal();
@@ -68,9 +93,18 @@ const ManageApplications = () => {
   return (
     <div className="card bg-base-100 shadow-xl">
       <div className="card-body">
-        <h2 className="card-title text-2xl mb-6">
-          Manage Applications ({applications.length})
-        </h2>
+        <div className="flex items-center justify-between mb-6 gap-4">
+          <h2 className="card-title text-2xl">
+            Manage Applications ({applications.length})
+          </h2>
+          <button
+            onClick={handleExportCsv}
+            className="btn btn-outline btn-sm flex items-center gap-2"
+          >
+            <PiDownloadSimple className="text-lg" />
+            <span>Export CSV (Admin / Super Admin)</span>
+          </button>
+        </div>
         <div className="overflow-x-auto">
           <table className="table table-zebra w-full">
             <thead>

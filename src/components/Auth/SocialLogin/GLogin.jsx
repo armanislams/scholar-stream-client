@@ -1,27 +1,41 @@
 import React from 'react';
 import useAuth from '../../../hooks/useAuth';
 import { toast } from 'react-toastify';
-import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import { useLocation, useNavigate } from 'react-router';
+import useAxios from '../../../hooks/useAxios';
 
 const GLogin = () => {
    const { signInGoogle } = useAuth();
-   const axiosSecure = useAxiosSecure();
+   const axiosInstance = useAxios();
    const location = useLocation();
-   const navigate = useNavigate();
+  const navigate = useNavigate();
+
+  const redirectTo = location?.state || '/';
+  
    const handleGoogle = () => {
      signInGoogle()
-       .then((result) => {
-         toast.success('Login Successful')
-         //create user in db
+       .then(async (result) => {
+         toast.success('Login Successful');
+
          const userInfo = {
            email: result.user.email,
            displayName: result.user.displayName,
            photoURL: result.user.photoURL,
          };
-         axiosSecure.post("/users", userInfo).then(() => {
-           navigate(location?.state || "/");
-         });
+
+         // Important: use a fresh token from the sign-in result, so we don't race
+         // against Auth context state updates (which can cause a 401 + redirect).
+         try {
+           const token = await result.user.getIdToken();
+           await axiosInstance.post("/users", userInfo, {
+             headers: { Authorization: `Bearer ${token}` },
+           });
+         } catch (error) {
+           // If user creation fails (e.g. already exists), still redirect user.
+           error;
+         } finally {
+           navigate(redirectTo, { replace: true });
+         }
        })
        .catch((err) => {
          (err);
