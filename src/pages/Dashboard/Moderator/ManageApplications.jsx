@@ -4,11 +4,13 @@ import { useQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 import { PiEye, PiChatText, PiXCircle, PiCheckCircle, PiDownloadSimple } from "react-icons/pi";
 import { useForm } from "react-hook-form";
+import useRole from "../../../hooks/useRole";
 
 const ManageApplications = () => {
   const axiosSecure = useAxiosSecure();
   const [selectedApp, setSelectedApp] = useState(null);
   const { register, handleSubmit, reset } = useForm();
+  const {role} = useRole()
 
   const {
     data: applications = [],
@@ -129,7 +131,7 @@ const ManageApplications = () => {
           </h2>
           <button
             onClick={handleExportCsv}
-            className="btn btn-outline btn-sm flex items-center gap-2"
+            className={`btn btn-outline btn-sm flex items-center gap-2 ${role === 'moderator' && 'hidden'}`}
           >
             <PiDownloadSimple className="text-lg" />
             <span>Export CSV (Admin / Super Admin)</span>
